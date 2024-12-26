@@ -74,7 +74,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                     RedirectStandardError = true,
                     CreateNoWindow = true,
                 });
-                await process.WaitForExitAsync();
+                process.WaitForExit();
                 #endif
             }
             EditorUtility.ClearProgressBar();

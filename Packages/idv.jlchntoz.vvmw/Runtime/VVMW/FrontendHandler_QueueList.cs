@@ -136,9 +136,17 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         void PlayQueueList(int index, bool deleteOnly, bool playListChanged) {
-            if (!Utilities.IsValid(localQueuedUrls)) return;
-            int newLength = localQueuedUrls.Length;
-            if (index >= newLength || newLength <= 0) return;
+            int newLength = Utilities.IsValid(localQueuedUrls) ? localQueuedUrls.Length : 0;
+            if (newLength <= 0) {
+                if (!deleteOnly && !playListChanged && index < 0 && RepeatAll) {
+                    GetLastPlayedUrl(out VRCUrl lastPCUrl, out VRCUrl lastQuestUrl, out byte lastActivePlayer);
+                    core.PlayUrl(lastPCUrl, lastQuestUrl, lastActivePlayer);
+                    core._ResetTitle();
+                    RecordPlaybackHistory(lastPCUrl, lastQuestUrl, lastActivePlayer, localCurrentTitle);
+                }
+                return;
+            }
+            if (index >= newLength) return;
             if (index < 0) {
                 if (deleteOnly) {
                     localPlayListIndex = 0;
@@ -180,27 +188,7 @@ namespace JLChnToZ.VRC.VVMW {
             Array.Copy(localQueuedTitles, index + 1, newTitles, index, copyCount);
             if (shouldReEnqueue) {
                 int lastIndex = newLength - 1;
-                byte lastActivePlayer;
-                VRCUrl lastPCUrl, lastQuestUrl;
-                if (core.IsReady) {
-#if UNITY_ANDROID || UNITY_IOS
-                    lastPCUrl = core.AltUrl;
-                    lastQuestUrl = core.Url;
-#else
-                    lastPCUrl = core.Url;
-                    lastQuestUrl = core.AltUrl;
-#endif
-                    lastActivePlayer = core.ActivePlayer;
-                } else {
-#if UNITY_ANDROID || UNITY_IOS
-                    lastPCUrl = core.LastAltUrl;
-                    lastQuestUrl = core.LastUrl;
-#else
-                    lastPCUrl = core.LastUrl;
-                    lastQuestUrl = core.LastAltUrl;
-#endif
-                    lastActivePlayer = core.LastActivePlayer;
-                }
+                GetLastPlayedUrl(out VRCUrl lastPCUrl, out VRCUrl lastQuestUrl, out byte lastActivePlayer);
                 newQueue[lastIndex] = lastPCUrl;
                 if (hasQuestUrl) newQuestQueue[lastIndex] = lastQuestUrl;
                 newPlayerIndexQueue[lastIndex] = lastActivePlayer;
@@ -218,6 +206,28 @@ namespace JLChnToZ.VRC.VVMW {
             }
             RequestSync();
             UpdateState();
+        }
+
+        void GetLastPlayedUrl(out VRCUrl pcUrl, out VRCUrl questUrl, out byte playerIndex) {
+            if (core.IsReady) {
+#if UNITY_ANDROID || UNITY_IOS
+                pcUrl = core.AltUrl;
+                questUrl = core.Url;
+#else
+                pcUrl = core.Url;
+                questUrl = core.AltUrl;
+#endif
+                playerIndex = core.ActivePlayer;
+            } else {
+#if UNITY_ANDROID || UNITY_IOS
+                pcUrl = core.LastAltUrl;
+                questUrl = core.LastUrl;
+#else
+                pcUrl = core.LastUrl;
+                questUrl = core.LastAltUrl;
+#endif
+                playerIndex = core.LastActivePlayer;
+            }
         }
     }
 }

@@ -344,7 +344,7 @@ namespace JLChnToZ.VRC.VVMW {
         public void _PlayNext() {
             if (synced && !Networking.IsOwner(gameObject)) return;
             if (localPlayListIndex == 0) {
-                if (IsArrayNullOrEmpty(localQueuedUrls)) {
+                if (IsArrayNullOrEmpty(localQueuedUrls) && !RepeatAll) {
                     if (autoPlayOnIdle) _AutoPlay();
                     return;
                 }

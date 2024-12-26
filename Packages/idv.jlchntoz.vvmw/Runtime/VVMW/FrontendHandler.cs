@@ -26,6 +26,8 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core.autoPlayDelay")] float autoPlayDelay = 0;
         [SerializeField, LocalizedLabel] bool seedRandomBeforeShuffle = true;
         [UdonSynced] byte flags;
+        int localPlayingPlaylistIndex = -1;
+        bool forceStop;
         bool synced;
         byte localFlags;
         bool afterFirstRun, isDataArrivedBeforeInit;
@@ -221,6 +223,7 @@ namespace JLChnToZ.VRC.VVMW {
             localQueuedTitles = new string[0];
             localPlayingIndex = 0;
             localPlayListIndex = 0;
+            forceStop = true;
             RequestSync();
             SendEvent("_OnStop");
         }
@@ -238,6 +241,7 @@ namespace JLChnToZ.VRC.VVMW {
                 SendCustomEventDelayedFrames(nameof(_PlayNext), 0);
             } else
                 core.Stop();
+            forceStop = false;
             SendEvent("_OnSkip");
         }
 
@@ -255,7 +259,11 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         /// <inheritdoc cref="Core.OnVideoReady" />
-        public override void OnVideoReady() => UpdateState();
+        public override void OnVideoReady() {
+            UpdateState();
+            forceStop = false;
+            localPlayingPlaylistIndex = localPlayListIndex;
+        }
         /// <inheritdoc cref="Core.OnVideoStart" />
         public override void OnVideoStart() => UpdateState();
         /// <inheritdoc cref="Core.OnVideoPlay" />
@@ -270,6 +278,7 @@ namespace JLChnToZ.VRC.VVMW {
 
         public void _OnVideoError() {
             UpdateState();
+            localPlayingPlaylistIndex = -1;
             // If already gave up, try next one
             if (!core.IsLoading) SendCustomEventDelayedFrames(nameof(_PlayNext), 0);
         }
@@ -344,16 +353,18 @@ namespace JLChnToZ.VRC.VVMW {
         public void _PlayNext() {
             if (synced && !Networking.IsOwner(gameObject)) return;
             if (localPlayListIndex == 0) {
-                if (IsArrayNullOrEmpty(localQueuedUrls) && !RepeatAll) {
+                if (IsArrayNullOrEmpty(localQueuedUrls) && !RepeatAll && !forceStop) {
                     if (autoPlayOnIdle) _AutoPlay();
                     return;
                 }
-                PlayQueueList(-1, false, false);
+                forceStop = false;
+                PlayQueueList(-1, false);
             } else {
-                if (IsArrayNullOrEmpty(localPlayListOrder)) {
+                if (IsArrayNullOrEmpty(localPlayListOrder) && !forceStop) {
                     if (autoPlayOnIdle) _AutoPlay();
                     return;
                 }
+                forceStop = false;
                 PlayPlayList(-1);
             }
         }
@@ -384,8 +395,7 @@ namespace JLChnToZ.VRC.VVMW {
         public void PlayAt(int playListIndex, int entryIndex, bool deleteOnly) {
             int actualPlayListIndex = playListIndex;
             if (actualPlayListIndex < 0) actualPlayListIndex = 0;
-            bool playListChanged = actualPlayListIndex != localPlayListIndex;
-            if (playListChanged) {
+            if (actualPlayListIndex != localPlayListIndex) {
                 localQueuedUrls = null;
                 localQueuedQuestUrls = null;
                 localQueuedPlayerIndex = null;
@@ -398,7 +408,7 @@ namespace JLChnToZ.VRC.VVMW {
             else if (playListIndex == -1)
                 PlayHistory(entryIndex);
             else
-                PlayQueueList(entryIndex, deleteOnly, playListChanged);
+                PlayQueueList(entryIndex, deleteOnly);
         }
 
         // API used with UdonAuth or other capability systems

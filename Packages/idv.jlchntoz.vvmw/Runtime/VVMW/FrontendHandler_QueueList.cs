@@ -135,10 +135,10 @@ namespace JLChnToZ.VRC.VVMW {
             core._ResetTitle();
         }
 
-        void PlayQueueList(int index, bool deleteOnly, bool playListChanged) {
+        void PlayQueueList(int index, bool deleteOnly) {
             int newLength = Utilities.IsValid(localQueuedUrls) ? localQueuedUrls.Length : 0;
             if (newLength <= 0) {
-                if (!deleteOnly && !playListChanged && index < 0 && RepeatAll) {
+                if (!deleteOnly && localPlayingPlaylistIndex == 0 && index < 0 && RepeatAll) {
                     GetLastPlayedUrl(out VRCUrl lastPCUrl, out VRCUrl lastQuestUrl, out byte lastActivePlayer);
                     core.PlayUrl(lastPCUrl, lastQuestUrl, lastActivePlayer);
                     core._ResetTitle();
@@ -160,7 +160,7 @@ namespace JLChnToZ.VRC.VVMW {
                 }
                 index = Shuffle ? UnityEngine.Random.Range(0, newLength) : 0;
             }
-            var shouldReEnqueue = !playListChanged && !deleteOnly && RepeatAll;
+            var shouldReEnqueue = !deleteOnly && localPlayingPlaylistIndex == 0 && RepeatAll;
             if (!shouldReEnqueue) newLength--;
             var url = localQueuedUrls[index];
             bool hasQuestUrl = !IsArrayNullOrEmpty(localQueuedQuestUrls);

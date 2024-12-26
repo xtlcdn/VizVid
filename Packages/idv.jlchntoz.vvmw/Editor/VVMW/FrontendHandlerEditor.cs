@@ -17,7 +17,8 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         SerializedProperty historySizeProperty;
         SerializedProperty defaultPlayListIndexProperty;
         SerializedProperty playListTitlesProperty;
-        SerializedProperty autoPlayProperty;
+        SerializedProperty autoPlayOnJoinProperty;
+        SerializedProperty autoPlayOnIdleProperty;
         SerializedProperty autoPlayDelayProperty;
         SerializedProperty targetsProperty;
         SerializedProperty seedRandomBeforeShuffleProperty;
@@ -35,7 +36,8 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             historySizeProperty = serializedObject.FindProperty("historySize");
             defaultPlayListIndexProperty = serializedObject.FindProperty("defaultPlayListIndex");
             playListTitlesProperty = serializedObject.FindProperty("playListTitles");
-            autoPlayProperty = serializedObject.FindProperty("autoPlay");
+            autoPlayOnJoinProperty = serializedObject.FindProperty("autoPlayOnJoin");
+            autoPlayOnIdleProperty = serializedObject.FindProperty("autoPlayOnIdle");
             autoPlayDelayProperty = serializedObject.FindProperty("autoPlayDelay");
             targetsProperty = serializedObject.FindProperty("targets");
             seedRandomBeforeShuffleProperty = serializedObject.FindProperty("seedRandomBeforeShuffle");
@@ -111,11 +113,12 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                     }
                 }
             }
-            EditorGUILayout.PropertyField(autoPlayProperty);
-            if (autoPlayProperty.boolValue) {
+            EditorGUILayout.PropertyField(autoPlayOnJoinProperty);
+            if (autoPlayOnJoinProperty.boolValue) {
                 EditorGUILayout.PropertyField(autoPlayDelayProperty);
                 if (autoPlayDelayProperty.floatValue < 0) autoPlayDelayProperty.floatValue = 0;
             }
+            EditorGUILayout.PropertyField(autoPlayOnIdleProperty);
             EditorGUILayout.Space();
             var loopMode = LoopMode.None;
             bool hasLoopOne = false;

@@ -1,7 +1,8 @@
 ﻿using System;
-using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
+using UdonSharp;
 using JLChnToZ.VRC.Foundation;
 using JLChnToZ.VRC.Foundation.I18N;
 
@@ -20,7 +21,8 @@ namespace JLChnToZ.VRC.VVMW {
         [FieldChangeCallback(nameof(Locked))]
         [SerializeField, LocalizedLabel] bool locked = false;
         [SerializeField, LocalizedLabel] bool defaultLoop, defaultShuffle;
-        [SerializeField, LocalizedLabel] bool autoPlay = true;
+        [SerializeField, LocalizedLabel, FormerlySerializedAs("autoPlay")] bool autoPlayOnJoin = true;
+        [SerializeField, LocalizedLabel] bool autoPlayOnIdle = false;
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core.autoPlayDelay")] float autoPlayDelay = 0;
         [SerializeField, LocalizedLabel] bool seedRandomBeforeShuffle = true;
         [UdonSynced] byte flags;
@@ -152,7 +154,7 @@ namespace JLChnToZ.VRC.VVMW {
                 LoadDynamicPlaylist(i);
             if (!synced || Networking.IsOwner(gameObject)) {
                 if (core.Loop) localFlags |= REPEAT_ONE;
-                if (defaultPlayListIndex > 0 && defaultPlayListIndex <= playListUrlOffsets.Length && autoPlay)
+                if (defaultPlayListIndex > 0 && defaultPlayListIndex <= playListUrlOffsets.Length && autoPlayOnJoin)
                     SendCustomEventDelayedSeconds(nameof(_AutoPlay), autoPlayDelay);
                 else {
                     RequestSync();
@@ -164,6 +166,9 @@ namespace JLChnToZ.VRC.VVMW {
                 OnDeserialization();
         }
 
+        /// <summary>
+        /// Apply default playback order settings and play the default playlist.
+        /// </summary>
         public void _AutoPlay() {
             core.Loop = RepeatOne;
             if (defaultLoop) localFlags |= REPEAT_ALL;
@@ -338,7 +343,19 @@ namespace JLChnToZ.VRC.VVMW {
         /// </summary>
         public void _PlayNext() {
             if (synced && !Networking.IsOwner(gameObject)) return;
-            PlayAt(localPlayListIndex, -1, false);
+            if (localPlayListIndex == 0) {
+                if (IsArrayNullOrEmpty(localQueuedUrls)) {
+                    if (autoPlayOnIdle) _AutoPlay();
+                    return;
+                }
+                PlayQueueList(-1, false, false);
+            } else {
+                if (IsArrayNullOrEmpty(localPlayListOrder)) {
+                    if (autoPlayOnIdle) _AutoPlay();
+                    return;
+                }
+                PlayPlayList(-1);
+            }
         }
 
         /// <inheritdoc cref="PlayAt(int, int, bool)" />

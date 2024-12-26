@@ -72,12 +72,12 @@ namespace JLChnToZ.VRC.VVMW {
                     newFlags = (byte)((localFlags | REPEAT_ONE) & ~REPEAT_ALL & 0xFF);
                 else
                     newFlags &= ~REPEAT_ONE & 0xFF;
+                core.Loop = value;
                 if (newFlags != localFlags) {
                     localFlags = newFlags;
                     if (localPlayListIndex > 0) RefreshPlayListQueue(-1);
                     RequestSync();
                 }
-                UpdateLoop();
                 UpdateState();
             }
         }
@@ -89,16 +89,16 @@ namespace JLChnToZ.VRC.VVMW {
             get => (localFlags & REPEAT_ALL) == REPEAT_ALL;
             set {
                 byte newFlags = localFlags;
-                if (value)
+                if (value) {
                     newFlags = (byte)((localFlags | REPEAT_ALL) & ~REPEAT_ONE & 0xFF);
-                else
+                    core.Loop = false;
+                } else
                     newFlags &= ~REPEAT_ALL & 0xFF;
                 if (newFlags != localFlags) {
                     localFlags = newFlags;
                     if (localPlayListIndex > 0) RefreshPlayListQueue(-1);
                     RequestSync();
                 }
-                UpdateLoop();
                 UpdateState();
             }
         }
@@ -165,7 +165,7 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         public void _AutoPlay() {
-            UpdateLoop();
+            core.Loop = RepeatOne;
             if (defaultLoop) localFlags |= REPEAT_ALL;
             if (defaultShuffle) {
                 localFlags |= SHUFFLE;
@@ -291,10 +291,15 @@ namespace JLChnToZ.VRC.VVMW {
             historyQuestUrls = !Utilities.IsValid(localHistoryQuestUrls) ? new VRCUrl[0] : localHistoryQuestUrls;
             historyPlayerIndex = !Utilities.IsValid(localHistoryPlayerIndex) ? new byte[0] : localHistoryPlayerIndex;
             historyTitles = !Utilities.IsValid(localHistoryTitles) ? "" : string.Join("\u2029", localHistoryTitles);
+            currentTitle = localCurrentTitle;
             flags = localFlags;
             playListIndex = (ushort)localPlayListIndex;
             playingIndex = localPlayingIndex;
-            if (UpdateLoop()) UpdateAudioLink();
+            bool shouldLoop = RepeatOne;
+            if (core.Loop != shouldLoop) {
+                core.Loop = shouldLoop;
+                UpdateAudioLink();
+            }
         }
 
         /// <inheritdoc cref="Core.OnDeserialization" />
@@ -316,6 +321,7 @@ namespace JLChnToZ.VRC.VVMW {
             localHistoryPlayerIndex = historyPlayerIndex;
             localHistoryTitles = string.IsNullOrEmpty(historyTitles) && IsArrayNullOrEmpty(historyUrls) ?
                 new string[0] : historyTitles.Split('\u2029');
+            localCurrentTitle = currentTitle;
             localFlags = flags;
             if (playListIndex > 0) {
                 if (localPlayListIndex != playListIndex || localPlayingIndex != playingIndex)
@@ -323,7 +329,7 @@ namespace JLChnToZ.VRC.VVMW {
             } else core._ResetTitle();
             localPlayListIndex = playListIndex;
             localPlayingIndex = playingIndex;
-            UpdateLoop();
+            core.Loop = RepeatOne;
             UpdateState();
         }
 
@@ -361,7 +367,8 @@ namespace JLChnToZ.VRC.VVMW {
         public void PlayAt(int playListIndex, int entryIndex, bool deleteOnly) {
             int actualPlayListIndex = playListIndex;
             if (actualPlayListIndex < 0) actualPlayListIndex = 0;
-            if (actualPlayListIndex != localPlayListIndex) {
+            bool playListChanged = actualPlayListIndex != localPlayListIndex;
+            if (playListChanged) {
                 localQueuedUrls = null;
                 localQueuedQuestUrls = null;
                 localQueuedPlayerIndex = null;
@@ -374,7 +381,7 @@ namespace JLChnToZ.VRC.VVMW {
             else if (playListIndex == -1)
                 PlayHistory(entryIndex);
             else
-                PlayQueueList(entryIndex, deleteOnly);
+                PlayQueueList(entryIndex, deleteOnly, playListChanged);
         }
 
         // API used with UdonAuth or other capability systems
@@ -406,24 +413,5 @@ namespace JLChnToZ.VRC.VVMW {
         public void _OnTitleData() => UpdateState();
 
         bool IsArrayNullOrEmpty(Array array) => !Utilities.IsValid(array) || array.Length == 0;
-
-        bool UpdateLoop() {
-            bool wasLooping = core.Loop;
-            if (RepeatOne) {
-                if (wasLooping) return false;
-                core.Loop = true;
-                return true;
-            }
-            if (enableQueueList && RepeatAll && localPlayListIndex == 0 && IsArrayNullOrEmpty(localQueuedUrls)) {
-                if (wasLooping) return false;
-                core.Loop = true;
-                return true;
-            }
-            if (wasLooping) {
-                core.Loop = false;
-                return true;
-            }
-            return false;
-        }
     }
 }

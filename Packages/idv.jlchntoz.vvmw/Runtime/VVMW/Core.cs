@@ -34,7 +34,7 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel, Range(5, 20)] float retryDelay = 5.5F;
         [SerializeField, LocalizedLabel] float autoPlayDelay = 0;
         [UdonSynced] VRCUrl pcUrl, questUrl;
-        VRCUrl localUrl, loadingUrl, lastUrl, altUrl;
+        VRCUrl localUrl, loadingUrl, lastUrl, altUrl, lastAltUrl;
         // When playing, it is the time when the video started playing;
         // When paused, it is the progress of the video in ticks.
         [UdonSynced] byte activePlayer;
@@ -131,9 +131,19 @@ namespace JLChnToZ.VRC.VVMW {
         public VRCUrl Url => localUrl;
 
         /// <summary>
+        /// The URL for alternative platform. (Quest URL when on PC, vice versa)
+        /// </summary>
+        public VRCUrl AltUrl => altUrl;
+
+        /// <summary>
         /// The URL previously loaded.
         /// </summary>
         public VRCUrl LastUrl => lastUrl;
+
+        /// <summary>
+        /// The last URL for alternative platform. (Quest URL when on PC, vice versa)
+        /// </summary>
+        public VRCUrl LastAltUrl => lastAltUrl;
 
         /// <summary>
         /// Is the player synced in the instance.
@@ -563,6 +573,7 @@ namespace JLChnToZ.VRC.VVMW {
             if (!VRCUrl.IsNullOrEmpty(loadingUrl) || isLocalReloading) return;
             lastActivePlayer = activePlayer;
             lastUrl = localUrl;
+            lastAltUrl = altUrl;
             ActivePlayer = 0;
             localUrl = synced ? null : defaultUrl;
             trustUpdated = false;

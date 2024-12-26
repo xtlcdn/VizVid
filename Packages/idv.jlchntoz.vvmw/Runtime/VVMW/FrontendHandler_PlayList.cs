@@ -142,7 +142,6 @@ namespace JLChnToZ.VRC.VVMW {
             }
             core.PlayUrl(playListUrls[localPlayingIndex], playListUrlsQuest[localPlayingIndex], playListPlayerIndex[localPlayingIndex]);
             core.SetTitle(playListEntryTitles[localPlayingIndex], playListTitles[localPlayListIndex - 1]);
-            UpdateLoop();
             RequestSync();
             UpdateState();
         }

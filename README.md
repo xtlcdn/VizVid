@@ -80,6 +80,15 @@ For any issues, please contact me on [Discord server](https://discord.gg/fkDueQM
 ## License
 [MIT](./Packages/idv.jlchntoz.vvmw/LICENSE)
 
+You can:
+- Do whatever you want with this product.
+
+You can't:
+- Ask for warranty / charge copyright owner for any damages.
+
+You must:
+- Include the copyright notice / credits, **especially when copying any portion of source code / assets to other projects**. (As long as you keep the original credit section on the UI when included in your worlds, you don't need to take any action for this)
+
 ***
 
 Made with :heart: in :hong_kong: :taiwan:.

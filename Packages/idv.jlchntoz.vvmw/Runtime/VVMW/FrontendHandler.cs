@@ -218,6 +218,7 @@ namespace JLChnToZ.VRC.VVMW {
             if (locked) return;
             if (core.ActivePlayer == 0 || core.State < 3) // Manually trigger UI update
                 SendCustomEventDelayedFrames(nameof(_TriggerUIUpdate), 0);
+            forceStop = true;
             core.Stop();
             localQueuedUrls = new VRCUrl[0];
             localQueuedQuestUrls = null;
@@ -226,7 +227,6 @@ namespace JLChnToZ.VRC.VVMW {
             localQueuedTitles = new string[0];
             localPlayingIndex = 0;
             localPlayListIndex = 0;
-            forceStop = true;
             RequestSync();
             SendEvent("_OnStop");
         }
@@ -238,13 +238,13 @@ namespace JLChnToZ.VRC.VVMW {
         /// </summary>
         public void _Skip() {
             if (locked) return;
+            forceStop = false;
             if (core.ActivePlayer == 0 || core.State < 3) { // Stop() will not work if there is no active player (nothing is playing)
                 if (!Networking.IsOwner(gameObject))
                     Networking.SetOwner(Networking.LocalPlayer, gameObject);
                 SendCustomEventDelayedFrames(nameof(_PlayNext), 0);
             } else
                 core.Stop();
-            forceStop = false;
             SendEvent("_OnSkip");
         }
 

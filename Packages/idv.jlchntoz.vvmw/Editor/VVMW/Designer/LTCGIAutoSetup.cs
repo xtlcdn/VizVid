@@ -22,6 +22,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         const string PROXY_DEST_NAME = PROXY_DEST_PATH + "LTCGI_VizVidAutoSetup.cs";
 
         readonly Dictionary<Core, string> cores = new Dictionary<Core, string>();
+        bool coreDirty = true;
 
         [InitializeOnLoadMethod]
         static void OnLoad() {
@@ -50,7 +51,6 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         }
 
         public LTCGIAutoSetup() {
-            RefreshCores();
             SceneManager.activeSceneChanged += OnSceneUpdate;
             EditorApplication.hierarchyChanged += OnTransformUpdate;
         }
@@ -63,6 +63,12 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         public GameObject AutoSetupEditor(LTCGI_Controller controller) {
             bool first = false;
             GameObject go = null;
+            if (coreDirty) {
+                coreDirty = false;
+                cores.Clear();
+                foreach (var core in SceneManager.GetActiveScene().IterateAllComponents<Core>())
+                    cores.Add(core, GetHierarchyPath(core));
+            }
             foreach (var kv in cores) {
                 var core = kv.Key;
                 var path = kv.Value;
@@ -118,15 +124,9 @@ namespace JLChnToZ.VRC.VVMW.Designer {
             return string.Join("/", stack);
         }
 
-        void OnSceneUpdate(Scene oldScene, Scene newScene) => OnTransformUpdate();
+        void OnSceneUpdate(Scene oldScene, Scene newScene) => coreDirty = true;
 
-        void OnTransformUpdate() => RefreshCores();
-
-        void RefreshCores() {
-            cores.Clear();
-            foreach (var core in SceneManager.GetActiveScene().IterateAllComponents<Core>())
-                cores.Add(core, GetHierarchyPath(core));
-        }
+        void OnTransformUpdate() => coreDirty = true;
 
         static void Preprocess(LTCGIConfigurator configurator, Core core, LTCGI_Controller controller, List<LTCGI_Screen> screens) {
             try {

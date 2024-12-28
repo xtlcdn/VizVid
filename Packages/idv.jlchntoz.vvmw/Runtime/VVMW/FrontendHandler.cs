@@ -273,25 +273,51 @@ namespace JLChnToZ.VRC.VVMW {
         /// <inheritdoc cref="Core.OnVideoEnd" />
         public override void OnVideoEnd() {
             UpdateState();
-            SendCustomEventDelayedFrames(nameof(_PlayNext), 0);
+            if (forceStop) {
+                forceStop = false;
+                return;
+            }
+            SendCustomEventDelayedFrames(nameof(_AutoPlayNext), 0);
         }
 
-        public void _OnVideoError() {
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _OnVideoError() {
             UpdateState();
             localPlayingPlaylistIndex = -1;
+            if (forceStop) {
+                forceStop = false;
+                return;
+            }
             // If already gave up, try next one
-            if (!core.IsLoading) SendCustomEventDelayedFrames(nameof(_PlayNext), 0);
+            if (!core.IsLoading) SendCustomEventDelayedFrames(nameof(_AutoPlayNext), 0);
         }
 
-        public void _OnVideoBeginLoad() => UpdateState();
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _OnVideoBeginLoad() => UpdateState();
 
-        public void _OnVolumeChange() => SendEvent("_OnVolumeChange");
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _OnVolumeChange() => SendEvent("_OnVolumeChange");
 
-        public void _OnSyncOffsetChange() => SendEvent("_OnSyncOffsetChange");
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _OnSyncOffsetChange() => SendEvent("_OnSyncOffsetChange");
 
-        public void _OnSpeedChange() => SendEvent("_OnSpeedChange");
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _OnSpeedChange() => SendEvent("_OnSpeedChange");
 
-        public void _OnScreenSharedPropertiesChanged() => SendEvent("_OnScreenSharedPropertiesChanged");
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _OnScreenSharedPropertiesChanged() => SendEvent("_OnScreenSharedPropertiesChanged");
 
         /// <inheritdoc cref="Core.OnPreSerialization" />
         public override void OnPreSerialization() {
@@ -351,20 +377,30 @@ namespace JLChnToZ.VRC.VVMW {
         /// Play the next item in the queue list or playlist.
         /// </summary>
         public void _PlayNext() {
+            forceStop = false;
+            if (synced && !Networking.IsOwner(gameObject)) return;
+            if (localPlayListIndex == 0)
+                PlayQueueList(-1, false);
+            else
+                PlayPlayList(-1);
+        }
+
+        #if COMPILER_UDONSHARP
+        public
+        #endif
+        void _AutoPlayNext() {
             if (synced && !Networking.IsOwner(gameObject)) return;
             if (localPlayListIndex == 0) {
-                if (IsArrayNullOrEmpty(localQueuedUrls) && !RepeatAll && !forceStop) {
+                if (IsArrayNullOrEmpty(localQueuedUrls) && !RepeatAll) {
                     if (autoPlayOnIdle) _AutoPlay();
                     return;
                 }
-                forceStop = false;
                 PlayQueueList(-1, false);
             } else {
-                if (IsArrayNullOrEmpty(localPlayListOrder) && !forceStop) {
+                if (IsArrayNullOrEmpty(localPlayListOrder)) {
                     if (autoPlayOnIdle) _AutoPlay();
                     return;
                 }
-                forceStop = false;
                 PlayPlayList(-1);
             }
         }

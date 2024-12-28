@@ -77,7 +77,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                     first = true;
                 }
                 if (GUILayout.Button($"Auto-Configure '{path}'")) {
-                    foreach (var existing in Foundation.Editors.Utils.IterateAllComponents<LTCGIConfigurator>(SceneManager.GetActiveScene(), true)) {
+                    foreach (var existing in SceneManager.GetActiveScene().IterateAllComponents<LTCGIConfigurator>(true)) {
                         if (existing.core == core)
                             go = existing.gameObject;
                         else
@@ -128,8 +128,10 @@ namespace JLChnToZ.VRC.VVMW.Designer {
 
         void OnTransformUpdate() => coreDirty = true;
 
-        static void Preprocess(LTCGIConfigurator configurator, Core core, LTCGI_Controller controller, List<LTCGI_Screen> screens) {
+        static void Preprocess(LTCGIConfigurator configurator) {
             try {
+                var core = configurator.core;
+                var controller = configurator.controller;
                 if (core == null || controller == null) {
                     Debug.LogError("[VizVid LTCGI Configurator] Missing Core or Controller.");
                     return;

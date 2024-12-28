@@ -10,13 +10,13 @@ using JLChnToZ.VRC.Foundation.ThirdParties.LitJson;
 namespace JLChnToZ.VRC.VVMW.Editors {
     public static class YtdlpResolver {
         const string YTDLP_DOWNLOAD_PATH_BASE = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/";
-        #if UNITY_EDITOR_WIN
+#if UNITY_EDITOR_WIN
         const string YTDLP_DOWNLOAD_PATH = YTDLP_DOWNLOAD_PATH_BASE + "yt-dlp.exe";
-        #elif UNITY_EDITOR_OSX
+#elif UNITY_EDITOR_OSX
         const string YTDLP_DOWNLOAD_PATH = YTDLP_DOWNLOAD_PATH_BASE + "yt-dlp_macos";
-        #elif UNITY_EDITOR_LINUX
+#elif UNITY_EDITOR_LINUX
         const string YTDLP_DOWNLOAD_PATH = YTDLP_DOWNLOAD_PATH_BASE + "yt-dlp_linux";
-        #endif
+#endif
         static string ytdlpPath;
         static bool hasYtdlp = false;
 
@@ -56,18 +56,18 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 }
             }
             if (
-                #if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_1_OR_NEWER
                 request.result != UnityWebRequest.Result.Success
-                #else
+#else
                 request.isNetworkError || request.isHttpError
-                #endif
+#endif
             ) {
                 if (File.Exists(path)) File.Delete(path);
             } else {
                 var ytdlpPath = YtdlpPath;
                 if (File.Exists(ytdlpPath)) File.Delete(ytdlpPath);
                 File.Move(path, ytdlpPath);
-                #if !UNITY_EDITOR_WIN
+#if !UNITY_EDITOR_WIN
                 var process = Process.Start(new ProcessStartInfo("chmod", $"+x {ytdlpPath}") {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -75,7 +75,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                     CreateNoWindow = true,
                 });
                 process.WaitForExit();
-                #endif
+#endif
             }
             EditorUtility.ClearProgressBar();
         }

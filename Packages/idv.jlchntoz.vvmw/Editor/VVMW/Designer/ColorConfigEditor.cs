@@ -67,11 +67,11 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         }
 
         static void AutoConfigurate() {
-            #if UNITY_2022_2_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
             int count = SceneManager.loadedSceneCount;
-            #else
+#else
             int count = SceneManager.sceneCount;
-            #endif
+#endif
             for (int i = 0; i < count; i++) AutoConfigurate(SceneManager.GetSceneAt(i));
         }
 

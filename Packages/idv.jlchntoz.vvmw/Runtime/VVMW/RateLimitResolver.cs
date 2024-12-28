@@ -42,7 +42,7 @@ namespace JLChnToZ.VRC.VVMW {
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
     public partial class RateLimitResolver : ISingleton<RateLimitResolver> {
-        void ISingleton<RateLimitResolver>.Merge(RateLimitResolver[] others) {} // Do Nothing.
+        void ISingleton<RateLimitResolver>.Merge(RateLimitResolver[] others) { } // Do Nothing.
     }
 #endif
 }

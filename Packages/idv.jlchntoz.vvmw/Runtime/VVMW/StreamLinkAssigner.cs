@@ -21,11 +21,13 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core"), Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before
-        )] protected Core core;
+        )]
+        protected Core core;
         [SerializeField, LocalizedLabel(Key = "VVMW.Handler"), Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before
-        )] protected FrontendHandler frontendHandler;
+        )]
+        protected FrontendHandler frontendHandler;
         [SerializeField, LocalizedLabel] protected string streamKeyTemplate, streamUrlTemplate = "rtspt://example.com/live/{0}", altStreamUrlTemplate = "rtsp://example.com/live/{0}";
         [SerializeField, LocalizedLabel] protected bool currentUserOnly;
         [SerializeField, LocalizedLabel] protected VRCUrl[] streamLinks, altStreamLinks;

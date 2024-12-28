@@ -6,5 +6,5 @@ namespace JLChnToZ.VRC.VVMW {
     /// A base class that come with a nice branded inspector.
     /// </summary>
     [HelpURL("https://xtlcdn.github.io/VizVid/docs/")]
-    public abstract class VizVidBehaviour : UdonSharpBehaviour {}
+    public abstract class VizVidBehaviour : UdonSharpBehaviour { }
 }

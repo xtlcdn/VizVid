@@ -57,7 +57,7 @@ namespace JLChnToZ.VRC.VVMW {
                 return 0;
             }
         }
-    
+
         /// <summary>
         /// How masny items left on the queue list or playlist.
         /// </summary>
@@ -143,7 +143,10 @@ namespace JLChnToZ.VRC.VVMW {
 
         void OnEnable() => _Init();
 
-        public void _Init() {
+#if COMPILER_UDONSHARP
+        public
+#endif
+        void _Init() {
             if (afterFirstRun) return;
             if (!core.afterFirstRun) {
                 Debug.LogWarning("[VVMW] It seems FrontendHandler initialized before Core, and this should not happened (Hence the script execution order).\nWaiting for Core to initialize...");
@@ -184,7 +187,7 @@ namespace JLChnToZ.VRC.VVMW {
             ) - playListUrlOffsets[localPlayListIndex - 1];
             PlayPlayList(defaultShuffle && length > 0 ? UnityEngine.Random.Range(0, length) : 0);
         }
-        
+
         protected void UpdateState() {
             SendEvent("_OnUIUpdate");
             UpdateAudioLink();
@@ -280,9 +283,9 @@ namespace JLChnToZ.VRC.VVMW {
             SendCustomEventDelayedFrames(nameof(_AutoPlayNext), 0);
         }
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _OnVideoError() {
             UpdateState();
             localPlayingPlaylistIndex = -1;
@@ -294,29 +297,29 @@ namespace JLChnToZ.VRC.VVMW {
             if (!core.IsLoading) SendCustomEventDelayedFrames(nameof(_AutoPlayNext), 0);
         }
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _OnVideoBeginLoad() => UpdateState();
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _OnVolumeChange() => SendEvent("_OnVolumeChange");
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _OnSyncOffsetChange() => SendEvent("_OnSyncOffsetChange");
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _OnSpeedChange() => SendEvent("_OnSpeedChange");
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _OnScreenSharedPropertiesChanged() => SendEvent("_OnScreenSharedPropertiesChanged");
 
         /// <inheritdoc cref="Core.OnPreSerialization" />
@@ -385,9 +388,9 @@ namespace JLChnToZ.VRC.VVMW {
                 PlayPlayList(-1);
         }
 
-        #if COMPILER_UDONSHARP
+#if COMPILER_UDONSHARP
         public
-        #endif
+#endif
         void _AutoPlayNext() {
             if (synced && !Networking.IsOwner(gameObject)) return;
             if (localPlayListIndex == 0) {

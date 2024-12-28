@@ -305,9 +305,9 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                         else targetProperty.objectReferenceValue = null;
                     } else if (value is CustomRenderTexture crt)
                         targetProperty.objectReferenceValue = crt.material;
-                    else if (value is Renderer) {}
-                    else if (value is Material) {}
-                    else if (value is RawImage) {}
+                    else if (value is Renderer) { }
+                    else if (value is Material) { }
+                    else if (value is RawImage) { }
                     else targetProperty.objectReferenceValue = null;
                     if (GUILayout.Button(i18n.GetLocalizedContent("VVMW.Remove"), GUILayout.ExpandWidth(false))) {
                         FUtils.DeleteElement(screenTargetsProperty, i);

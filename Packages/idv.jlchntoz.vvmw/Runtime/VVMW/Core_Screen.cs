@@ -92,11 +92,11 @@ namespace JLChnToZ.VRC.VVMW {
                             screenTargetPropertyBlock.SetTexture(screenTargetPropertyIds[i], texture);
                         if (avProPropertyIds[i] != 0) {
                             if ((screenTargetModes[i] & 0x8) != 0)
-                            #if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN
                                 screenTargetPropertyBlock.SetVector(avProPropertyIds[i], isAvPro ? flippedST : normalST);
-                            #else
-                                {} // Do nothing
-                            #endif
+#else
+                            {} // Do nothing
+#endif
                             else
                                 screenTargetPropertyBlock.SetInt(avProPropertyIds[i], isAvPro ? 1 : 0);
                         }
@@ -121,9 +121,9 @@ namespace JLChnToZ.VRC.VVMW {
                     case 4: { // UI RawImage
                         var rawImage = (RawImage)screenTargets[i];
                         rawImage.texture = texture;
-                        #if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN
                         rawImage.uvRect = isAvPro ? flippedRect : normalRect;
-                        #endif
+#endif
                         break;
                     }
                 }
@@ -249,11 +249,11 @@ namespace JLChnToZ.VRC.VVMW {
                 material.SetTexture(screenTargetPropertyIds[i], texture);
             if (avProPropertyIds[i] != 0) {
                 if ((screenTargetModes[i] & 0x8) != 0)
-                #if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN
                     material.SetVector(avProPropertyIds[i], isAvPro ? flippedST : normalST);
-                #else
+#else
                     {} // Do nothing
-                #endif
+#endif
                 else
                     material.SetInt(avProPropertyIds[i], isAvPro ? 1 : 0);
             }

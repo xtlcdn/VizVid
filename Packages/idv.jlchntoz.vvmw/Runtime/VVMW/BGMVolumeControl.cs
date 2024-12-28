@@ -49,7 +49,7 @@ namespace JLChnToZ.VRC.VVMW {
         /// Unmute the background music.
         /// </summary>
         public void Unmute() => isMuted = false;
-        
+
         public override void OnVideoStart() => isVideoPlaying = !core.IsStatic;
 
         public override void OnVideoPlay() => isVideoPlaying = !core.IsStatic;

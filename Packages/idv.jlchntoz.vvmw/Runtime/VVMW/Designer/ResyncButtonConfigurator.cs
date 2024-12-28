@@ -21,11 +21,12 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         [Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.NextSibling
-        ), SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")] Core core;
+        ), SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")]
+        Core core;
         [SerializeField, LocalizedLabel] bool globalSync;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     public partial class ResyncButtonConfigurator : ISelfPreProcess {
         internal static Func<UdonSharpBehaviour, UdonBehaviour> getBackingUdonBehaviour;
 
@@ -52,5 +53,5 @@ namespace JLChnToZ.VRC.VVMW.Designer {
             );
         }
     }
-    #endif
+#endif
 }

@@ -26,9 +26,9 @@ namespace JLChnToZ.VRC.VVMW.Designer {
 
         protected override void ConfigurateCore(ColorConfig colorConfig) {
             if (TryGetComponent(out Selectable selectable)) {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 if (!Application.isPlaying) Undo.RecordObject(selectable, "Color Tint Auto Configurator");
-                #endif
+#endif
                 var colorBlock = selectable.colors;
                 if (normalColorIndex >= 0 && normalColorIndex < colorConfig.colors.Length)
                     colorBlock.normalColor = colorConfig.colors[normalColorIndex];
@@ -41,9 +41,9 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                 if (disabledColorIndex >= 0 && disabledColorIndex < colorConfig.colors.Length)
                     colorBlock.disabledColor = colorConfig.colors[disabledColorIndex];
                 selectable.colors = colorBlock;
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 if (!Application.isPlaying) EditorUtility.SetDirty(selectable);
-                #endif
+#endif
             }
         }
     }

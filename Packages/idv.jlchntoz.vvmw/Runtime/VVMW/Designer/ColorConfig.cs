@@ -25,15 +25,15 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         /// </summary>
         public void ConfigurateColors() {
             var autoConfigurators = GetComponentsInChildren<AbstractAutoConfigurator>(true);
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (!Application.isPlaying) Undo.RecordObject(this, "Color Pre Config");
-            #endif
+#endif
             foreach (var autoConfigurator in autoConfigurators)
                 autoConfigurator.ConfigurateColor();
             appliedAutoConfigurators = autoConfigurators;
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (!Application.isPlaying) EditorUtility.SetDirty(this);
-            #endif
+#endif
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                     hasDirty = true;
                 }
             if (!hasDirty) return;
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (!Application.isPlaying) Undo.RecordObject(this, "Color Pre Config");
-            #endif
+#endif
             appliedAutoConfigurators = autoConfigurators;
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (!Application.isPlaying) EditorUtility.SetDirty(this);
-            #endif
+#endif
         }
     }
 }

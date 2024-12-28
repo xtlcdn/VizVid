@@ -17,7 +17,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         [SerializeField] int selectedColorIndex = -1;
         protected override void ConfigurateCore(ColorConfig colorConfig) {
             if (TryGetComponent(out ListEntry listEntry)) {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 using (var so = new SerializedObject(listEntry)) {
                     if (normalColorIndex >= 0 && normalColorIndex < colorConfig.colors.Length)
                         so.FindProperty("normalColor").colorValue = colorConfig.colors[normalColorIndex];
@@ -25,7 +25,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                         so.FindProperty("selectedColor").colorValue = colorConfig.colors[selectedColorIndex];
                     so.ApplyModifiedProperties();
                 }
-                #endif
+#endif
             }
         }
     }

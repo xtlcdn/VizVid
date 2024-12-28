@@ -18,7 +18,8 @@ namespace JLChnToZ.VRC.VVMW {
 #if COMPILER_UDONSHARP
         public
 #else
-        [LocalizedLabel, SerializeField] internal protected
+        [LocalizedLabel, SerializeField]
+        internal protected
 #endif
         string playerName = "";
         protected bool isActive, isReady, isPaused;

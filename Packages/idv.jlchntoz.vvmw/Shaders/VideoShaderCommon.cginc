@@ -17,13 +17,29 @@ inline half4 readVideoTexture(sampler2D videoTex, float2 uv) {
 
 inline half4 readAVProTexture(sampler2D videoTex, float2 uv) {
     #if UNITY_UV_STARTS_AT_TOP
-    uv.y = 1 - uv.y;
+        uv.y = 1 - uv.y;
     #endif
     half4 c = readVideoTexture(videoTex, uv);
     #if !UNITY_COLORSPACE_GAMMA
-    c.rgb = GammaToLinearSpace(c.rgb);
+        c.rgb = GammaToLinearSpace(c.rgb);
     #endif
     return c;
+}
+
+float2 getStereoUV(float2 uv, float4 stereoShift, float2 stereoExtend) {
+    return uv * stereoExtend + lerp(stereoShift.xy, stereoShift.zw, unity_StereoEyeIndex);
+}
+
+half4 getVideoTexture(sampler2D videoTex, float2 uv, bool avPro, float4 stereoShift, float2 stereoExtend) {
+    #ifdef _STEREO_DEBUG
+        uv *= stereoExtend;
+        return avPro ?
+            readAVProTexture(videoTex, uv + stereoShift.xy) * float4(1, 0.5, 0, 0.5) + readAVProTexture(videoTex, uv + stereoShift.zw) * float4(0, 0.5, 1, 0.5) :
+            readVideoTexture(videoTex, uv + stereoShift.xy) * float4(1, 0.5, 0, 0.5) + readVideoTexture(videoTex, uv + stereoShift.zw) * float4(0, 0.5, 1, 0.5);
+    #else
+        uv = getStereoUV(uv, stereoShift, stereoExtend);
+        return avPro ? readAVProTexture(videoTex, uv) : readVideoTexture(videoTex, uv);
+    #endif
 }
 
 half4 getVideoTexture(sampler2D videoTex, float2 uv, float4 texelSize, bool avPro, int sizeMode, float aspectRatio, float4 stereoShift, float2 stereoExtend) {
@@ -44,12 +60,10 @@ half4 getVideoTexture(sampler2D videoTex, float2 uv, float4 texelSize, bool avPr
         }
     }
     if (any(uv < 0 || uv > 1)) return 0;
-    uv = uv * stereoExtend + lerp(stereoShift.xy, stereoShift.zw, unity_StereoEyeIndex);
-    return avPro ? readAVProTexture(videoTex, uv) : readVideoTexture(videoTex, uv);
+    return getVideoTexture(videoTex, uv, avPro, stereoShift, stereoExtend);
 }
 
 half4 getVideoTexture(sampler2D videoTex, float2 uv, float4 texelSize, bool avPro, int sizeMode, float aspectRatio) {
     return getVideoTexture(videoTex, uv, texelSize, avPro, sizeMode, aspectRatio, 0, 1);
 }
-
 #endif

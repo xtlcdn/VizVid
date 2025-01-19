@@ -10,6 +10,9 @@
         _AspectRatio ("Target Aspect Ratio", Float) = 1.777778
     }
     SubShader {
+        Tags {
+            "VideoScreenFeatures" = "AutoScale,Stereo"
+        }
         Lighting Off
         Blend One Zero
         Pass {

@@ -15,7 +15,10 @@
         _AlphaClipThreshold ("Alpha Clip Threshold", Range(0, 1)) = 0.5
     }
     SubShader {
-        Tags { "RenderType" = "Opaque" }
+        Tags {
+            "RenderType" = "Opaque"
+            "VideoScreenFeatures" = "Brightness,AutoScale,Stereo"
+        }
         LOD 100
         Pass {
             CGPROGRAM

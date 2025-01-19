@@ -400,14 +400,14 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 var newTarget = EditorGUILayout.ObjectField(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.videoScreenTarget:add"), null, typeof(UnityObject), true);
                 if (changed.changed && newTarget != null) {
                     if (AppendScreen(
-                        newTarget,
+                        newTarget, new ScreenProperties(
                         screenTargetsProperty,
                         screenTargetModesProperty,
                         screenTargetIndecesProperty,
                         screenTargetPropertyNamesProperty,
                         screenTargetDefaultTexturesProperty,
                         avProPropertyNamesProperty
-                    )) screenTargetVisibilityState.Add(true);
+                    ))) screenTargetVisibilityState.Add(true);
                 }
             }
             EditorGUILayout.Space();
@@ -417,15 +417,8 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             using (var so = new SerializedObject(core)) {
                 if (newTarget is AudioSource)
                     AppendElement(so.FindProperty("audioSources"), newTarget);
-                else if (!AppendScreen(
-                    newTarget,
-                    so.FindProperty("screenTargets"),
-                    so.FindProperty("screenTargetModes"),
-                    so.FindProperty("screenTargetIndeces"),
-                    so.FindProperty("screenTargetPropertyNames"),
-                    so.FindProperty("screenTargetDefaultTextures"),
-                    so.FindProperty("avProPropertyNames")
-                )) return false;
+                else if (!AppendScreen(newTarget, new ScreenProperties(so)))
+                    return false;
                 if (recordUndo)
                     so.ApplyModifiedProperties();
                 else
@@ -435,15 +428,27 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             return true;
         }
 
-        static bool AppendScreen(
-            UnityObject newTarget,
-            SerializedProperty screenTargetsProperty,
-            SerializedProperty screenTargetModesProperty,
-            SerializedProperty screenTargetIndecesProperty,
-            SerializedProperty screenTargetPropertyNamesProperty,
-            SerializedProperty screenTargetDefaultTexturesProperty,
-            SerializedProperty avProPropertyNamesProperty
-        ) {
+        public static bool AddTarget(Core core, Renderer newTarget, int materialIndex = -1, bool recordUndo = true, bool copyToUdon = false) {
+            using (var so = new SerializedObject(core)) {
+                var material = materialIndex < 0 ? newTarget.sharedMaterial : newTarget.sharedMaterials[materialIndex];
+                var mainTexturePropertyName = Utils.FindMainTexturePropertyName(material);
+                var avProPropertyName = FindAVProPropertyName(material);
+                var screenTargetMode = avProPropertyName == null ? 9 : 1;
+                var defaultTexture = material != null ? material.GetTexture(mainTexturePropertyName) : null;
+                AppendScreenUnchecked(
+                    newTarget, screenTargetMode, materialIndex, mainTexturePropertyName, defaultTexture, avProPropertyName,
+                    new ScreenProperties(so)
+                );
+                if (recordUndo)
+                    so.ApplyModifiedProperties();
+                else
+                    so.ApplyModifiedPropertiesWithoutUndo();
+            }
+            if (copyToUdon) UdonSharpEditorUtility.CopyProxyToUdon(core);
+            return true;
+        }
+
+        static bool AppendScreen(UnityObject newTarget, ScreenProperties props) {
             int screenTargetMode;
             Texture defaultTexture;
             string mainTexturePropertyName = null, avProPropertyName = null;
@@ -466,13 +471,28 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 screenTargetMode = 4;
                 defaultTexture = rawImage.texture;
             } else return false;
-            AppendElement(screenTargetsProperty, newTarget);
-            AppendElement(screenTargetModesProperty, screenTargetMode);
-            AppendElement(screenTargetIndecesProperty, -1);
-            AppendElement(screenTargetPropertyNamesProperty, mainTexturePropertyName ?? "_MainTex");
-            AppendElement(screenTargetDefaultTexturesProperty, defaultTexture);
-            AppendElement(avProPropertyNamesProperty, avProPropertyName ?? "_IsAVProVideo");
+            AppendScreenUnchecked(
+                newTarget, screenTargetMode, -1, mainTexturePropertyName, defaultTexture, avProPropertyName,
+                props
+            );
             return true;
+        }
+
+        static void AppendScreenUnchecked(
+            UnityObject newTarget,
+            int screenTargetMode,
+            int index,
+            string mainTexturePropertyName,
+            Texture defaultTexture,
+            string avProPropertyName,
+            ScreenProperties props
+        ) {
+            AppendElement(props.screenTargetsProperty, newTarget);
+            AppendElement(props.screenTargetModesProperty, screenTargetMode);
+            AppendElement(props.screenTargetIndecesProperty, index);
+            AppendElement(props.screenTargetPropertyNamesProperty, mainTexturePropertyName ?? "_MainTex");
+            AppendElement(props.screenTargetDefaultTexturesProperty, defaultTexture);
+            AppendElement(props.avProPropertyNamesProperty, avProPropertyName ?? "_IsAVProVideo");
         }
 
         static string FindAVProPropertyName(Material material) {
@@ -553,6 +573,40 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             foreach (var controller in SceneManager.GetActiveScene().IterateAllComponents<UdonSharpBehaviour>())
                 if (controllableTypes.TryGetValue(controller.GetType(), out var field) && field.GetValue(controller) is Core coreComponent)
                     autoPlayControllers[coreComponent] = controller;
+        }
+
+        struct ScreenProperties {
+            public readonly SerializedProperty screenTargetsProperty;
+            public readonly SerializedProperty screenTargetModesProperty;
+            public readonly SerializedProperty screenTargetIndecesProperty;
+            public readonly SerializedProperty screenTargetPropertyNamesProperty;
+            public readonly SerializedProperty screenTargetDefaultTexturesProperty;
+            public readonly SerializedProperty avProPropertyNamesProperty;
+
+            public ScreenProperties(
+                SerializedProperty screenTargetsProperty,
+                SerializedProperty screenTargetModesProperty,
+                SerializedProperty screenTargetIndecesProperty,
+                SerializedProperty screenTargetPropertyNamesProperty,
+                SerializedProperty screenTargetDefaultTexturesProperty,
+                SerializedProperty avProPropertyNamesProperty
+            ) {
+                this.screenTargetsProperty = screenTargetsProperty;
+                this.screenTargetModesProperty = screenTargetModesProperty;
+                this.screenTargetIndecesProperty = screenTargetIndecesProperty;
+                this.screenTargetPropertyNamesProperty = screenTargetPropertyNamesProperty;
+                this.screenTargetDefaultTexturesProperty = screenTargetDefaultTexturesProperty;
+                this.avProPropertyNamesProperty = avProPropertyNamesProperty;
+            }
+
+            public ScreenProperties(SerializedObject serializedObject) : this(
+                serializedObject.FindProperty("screenTargets"),
+                serializedObject.FindProperty("screenTargetModes"),
+                serializedObject.FindProperty("screenTargetIndeces"),
+                serializedObject.FindProperty("screenTargetPropertyNames"),
+                serializedObject.FindProperty("screenTargetDefaultTextures"),
+                serializedObject.FindProperty("avProPropertyNames")
+            ) { }
         }
     }
 }

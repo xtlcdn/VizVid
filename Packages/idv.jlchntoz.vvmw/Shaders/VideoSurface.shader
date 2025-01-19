@@ -14,7 +14,10 @@
         _EmissionIntensity ("Emission Intensity", Range(0, 10)) = 1.0
     }
     SubShader {
-        Tags { "RenderType"="Opaque" }
+        Tags {
+            "RenderType" = "Opaque"
+            "VideoScreenFeatures" = "Brightness,AutoScale,Stereo"
+        }
         LOD 200
 
         CGPROGRAM

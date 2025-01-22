@@ -17,8 +17,9 @@ namespace JLChnToZ.VRC.VVMW.Designer {
             colorsProperty = serializedObject.FindProperty("colors");
         }
 
-        public override void OnInspectorGUI() {
-            serializedObject.Update();
+        public override void OnInspectorGUI() => DrawInspectorGUI();
+
+        public override void DrawEmbeddedInspectorGUI() {
             EditorGUILayout.LabelField(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Designer.ColorConfig.colorPalette"), EditorStyles.boldLabel);
             for (int i = 0; i < colorsProperty.arraySize; i++) {
                 var colorProperty = colorsProperty.GetArrayElementAtIndex(i);
@@ -36,7 +37,11 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                         if (GUILayout.Button(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Designer.ColorConfig.removePalette")))
                             FUtils.DeleteElement(colorsProperty, colorsProperty.arraySize - 1);
                 }
-            serializedObject.ApplyModifiedProperties();
+        }
+
+        public override void DrawInspectorGUI() {
+            serializedObject.Update();
+            DrawEmbeddedInspectorGUI();
             EditorGUILayout.Space();
             using (new EditorGUILayout.HorizontalScope()) {
                 if (GUILayout.Button(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Designer.ColorConfig.apply")))
@@ -54,6 +59,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                     }
                 }
             }
+            serializedObject.ApplyModifiedProperties();
         }
 
         [InitializeOnLoadMethod]

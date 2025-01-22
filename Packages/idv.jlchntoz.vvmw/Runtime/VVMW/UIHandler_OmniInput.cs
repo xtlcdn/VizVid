@@ -59,7 +59,15 @@ namespace JLChnToZ.VRC.VVMW {
 #if COMPILER_UDONSHARP
         public
 #endif
-        void _InputConfirmClick() {
+        void _InputConfirmClick() => InputConfirmClick(false);
+
+
+#if COMPILER_UDONSHARP
+        public
+#endif
+        void _EnforceImmedPlayClick() => InputConfirmClick(true);
+
+        void InputConfirmClick(bool playImmediately) {
             var url = urlInput.GetUrl();
             var altUrl = url;
             if (!VRCUrl.IsNullOrEmpty(url)) {
@@ -70,6 +78,10 @@ namespace JLChnToZ.VRC.VVMW {
                 playListLastInteractTime = joinTime;
                 if (Utilities.IsValid(handler)) {
                     handler.PlayUrl(url, altUrl, selectedPlayer);
+                    if (playImmediately && handler.HasQueueList) {
+                        int queue = handler.QueueUrls.Length;
+                        if (queue > 0) handler.PlayAt(0, queue - 1, false);
+                    }
                     if (Utilities.IsValid(queueListScrollView))
                         SelectedPlayListIndex = handler.PlayListIndex;
                     UpdatePlayList();

@@ -81,6 +81,22 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             I18NUtils.DrawLocaleField();
             selfUpdater.DrawUpdateNotifier();
             EditorGUILayout.Space();
+            DrawInspectorGUI();
+        }
+
+        public virtual void DrawInspectorGUI() {
+            serializedObject.Update();
+            DrawEmbeddedInspectorGUI();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        public virtual void DrawEmbeddedInspectorGUI() {
+            var iterator = serializedObject.GetIterator();
+            if (iterator.NextVisible(true))
+                do {
+                    if (iterator.propertyPath == "m_Script") continue;
+                    EditorGUILayout.PropertyField(iterator);
+                } while (iterator.NextVisible(false));
         }
     }
 }

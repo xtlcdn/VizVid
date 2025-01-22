@@ -2804,12 +2804,14 @@ MonoBehaviour:
   handler: {fileID: 0}
   languageManager: {fileID: 0}
   urlInput: {fileID: 7249654291450956765}
+  altUrlInput: {fileID: 0}
   videoPlayerSelectButtonTemplate: {fileID: 5549347527116204822}
   videoPlayerSelectRoot: {fileID: 3134019309995457215}
   videoPlayerSelectPanel: {fileID: 1243247733899483628}
   videoPlayerSelectButton: {fileID: 5374476284004654423}
   cancelButton: {fileID: 8290869560386212173}
   urlInputConfirmButton: {fileID: 2854221936331231627}
+  enforcePlayImmediatelyButton: {fileID: 7910808412703227342}
   selectdPlayerText: {fileID: 2061350802308454796}
   selectdPlayerTMPro: {fileID: 0}
   queueModeText: {fileID: 4482131514141933274}
@@ -2913,6 +2915,7 @@ MonoBehaviour:
   - {r: 0.03137255, g: 0.050980393, b: 0.047058824, a: 1}
   - {r: 0.21568628, g: 0.25882354, b: 0.30980393, a: 1}
   - {r: 0.27450982, g: 0.34509805, b: 0.43137255, a: 1}
+  appliedAutoConfigurators: []
 --- !u!1 &6165191218853122122
 GameObject:
   m_ObjectHideFlags: 0
@@ -4940,6 +4943,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 584404463052152882}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7910808412703227342 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7337752019902963196, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+    type: 3}
+  m_PrefabInstance: {fileID: 584404463052152882}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8290869560386212173 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8868481790311608703, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
@@ -6193,6 +6208,11 @@ PrefabInstance:
     - target: {fileID: 166041885169990264, guid: 841e46d7359c4d641ac726e061f76c26,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928682645079549843, guid: 841e46d7359c4d641ac726e061f76c26,
+        type: 3}
+      propertyPath: m_Size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1928682645079549843, guid: 841e46d7359c4d641ac726e061f76c26,

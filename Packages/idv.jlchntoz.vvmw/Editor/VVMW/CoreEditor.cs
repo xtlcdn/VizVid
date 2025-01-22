@@ -19,7 +19,7 @@ using UnityObject = UnityEngine.Object;
 namespace JLChnToZ.VRC.VVMW.Editors {
     [CustomEditor(typeof(Core))]
     public class CoreEditor : VVMWEditorBase {
-        static readonly Dictionary<Type, FieldInfo> controllableTypes = new Dictionary<Type, FieldInfo>();
+        static readonly Dictionary<Type, (FieldInfo fieldInfo, Type editorType)> controllableTypes = new Dictionary<Type, (FieldInfo, Type)>();
         readonly Dictionary<Core, UdonSharpBehaviour> autoPlayControllers = new Dictionary<Core, UdonSharpBehaviour>();
         static readonly string[] materialModeOptions = new string[3];
         static string[] playerNames;
@@ -54,6 +54,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
 #endif
         SerializedReorderableList playerHandlersList, audioSourcesList, targetsList;
         List<bool> screenTargetVisibilityState;
+        Editor autoPlayControllerEditor;
 
         static CoreEditor() {
             AssemblyReloadEvents.afterAssemblyReload += GatherControlledTypes;
@@ -103,10 +104,19 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             GetControlledTypesOnScene();
         }
 
-        public override void OnInspectorGUI() {
-            base.OnInspectorGUI();
+        protected override void OnDisable() {
+            base.OnDisable();
+            if (autoPlayControllerEditor) DestroyImmediate(autoPlayControllerEditor);
+        }
+
+        public override void DrawInspectorGUI() {
             if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
             serializedObject.Update();
+            DrawEmbeddedInspectorGUI();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        public override void DrawEmbeddedInspectorGUI() {
             DrawAutoPlayField();
             EditorGUILayout.PropertyField(totalRetryCountProperty);
             EditorGUILayout.PropertyField(retryDelayProperty);
@@ -147,12 +157,17 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             EditorGUILayout.PropertyField(yttlManagerProperty);
             EditorGUILayout.Space();
             targetsList.DoLayoutList();
-            serializedObject.ApplyModifiedProperties();
         }
 
         void DrawAutoPlayField() {
             if (autoPlayControllers.TryGetValue(target as Core, out var controller)) {
-                if (GUILayout.Button(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.EditUrlsIn", controller.name)))
+                if (controllableTypes.TryGetValue(controller.GetType(), out var pair))
+                    CreateCachedEditor(controller, pair.editorType, ref autoPlayControllerEditor);
+                if (autoPlayControllerEditor is VVMWEditorBase controllerEditor) {
+                    controllerEditor.serializedObject.Update();
+                    controllerEditor.DrawEmbeddedInspectorGUI();
+                    controllerEditor.serializedObject.ApplyModifiedProperties();
+                } else if (GUILayout.Button(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.EditUrlsIn", controller.name)))
                     Selection.activeGameObject = controller.gameObject;
                 return;
             }
@@ -554,16 +569,29 @@ namespace JLChnToZ.VRC.VVMW.Editors {
 
         static void GatherControlledTypes() {
             controllableTypes.Clear();
+            var customEditorMapping = new Dictionary<Type, Type>();
+            var inspectedTypeField = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 foreach (var type in assembly.GetTypes()) {
-                    if (type.IsAbstract || !type.IsSubclassOf(typeof(UdonSharpBehaviour))) continue;
-                    var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    if (fields.Length == 0) continue;
-                    foreach (var field in fields) {
-                        if (field.FieldType == typeof(Core) && field.GetCustomAttribute<SingletonCoreControlAttribute>() != null) {
-                            controllableTypes[type] = field;
-                            break;
+                    if (type.IsAbstract) continue;
+                    if (type.IsSubclassOf(typeof(UdonSharpBehaviour))) {
+                        var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                        if (fields.Length == 0) continue;
+                        foreach (var field in fields) {
+                            if (field.FieldType == typeof(Core) && field.GetCustomAttribute<SingletonCoreControlAttribute>() != null) {
+                                customEditorMapping.TryGetValue(type, out var editorType);
+                                controllableTypes[type] = (field, editorType);
+                                break;
+                            }
                         }
+                    } else if (type.IsSubclassOf(typeof(VVMWEditorBase))) {
+                        var customEditorAttribute = type.GetCustomAttribute<CustomEditor>();
+                        if (customEditorAttribute == null) continue;
+                        var inspectedType = inspectedTypeField.GetValue(customEditorAttribute) as Type;
+                        if (controllableTypes.TryGetValue(inspectedType, out var value))
+                            controllableTypes[inspectedType] = (value.fieldInfo, type);
+                        else
+                            customEditorMapping[inspectedType] = type;
                     }
                 }
         }
@@ -571,7 +599,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         void GetControlledTypesOnScene() {
             autoPlayControllers.Clear();
             foreach (var controller in SceneManager.GetActiveScene().IterateAllComponents<UdonSharpBehaviour>())
-                if (controllableTypes.TryGetValue(controller.GetType(), out var field) && field.GetValue(controller) is Core coreComponent)
+                if (controllableTypes.TryGetValue(controller.GetType(), out var result) && result.fieldInfo.GetValue(controller) is Core coreComponent)
                     autoPlayControllers[coreComponent] = controller;
         }
 

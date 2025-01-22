@@ -67,8 +67,6 @@ MonoBehaviour:
   - {fileID: 3390069487340633333}
   - {fileID: 8750286140246044709}
   - {fileID: 477971394763837959}
-  audioSources:
-  - {fileID: 6288594590390066030}
   defaultUrl:
     url: 
   defaultQuestUrl:
@@ -78,8 +76,16 @@ MonoBehaviour:
   totalRetryCount: 3
   retryDelay: 5.5
   autoPlayDelay: 0
-  defaultVolume: 1
+  loop: 0
+  audioSources:
+  - {fileID: 6288594590390066030}
+  defaultVolume: 0.5
   defaultMuted: 0
+  audioLink: {fileID: 0}
+  realtimeGIUpdateInterval: 0
+  enablePersistence: 1
+  volumePersistenceKey: 
+  mutedPersistenceKey: 
   defaultTexture: {fileID: 2800000, guid: 01abd95bc275b454f9120f300635407c, type: 3}
   screenTargets: []
   screenTargetModes: 
@@ -89,10 +95,7 @@ MonoBehaviour:
   screenTargetDefaultTextures: []
   broadcastScreenTexture: 0
   broadcastScreenTextureName: _Udon_VideoTex
-  realtimeGIUpdateInterval: 0
   timeDriftDetectThreshold: 0.9
-  loop: 0
-  audioLink: {fileID: 0}
   yttl: {fileID: 0}
 --- !u!114 &-7058936528202053670
 MonoBehaviour:

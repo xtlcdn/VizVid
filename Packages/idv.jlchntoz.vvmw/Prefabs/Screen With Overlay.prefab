@@ -4604,12 +4604,14 @@ MonoBehaviour:
   handler: {fileID: 0}
   languageManager: {fileID: 0}
   urlInput: {fileID: 8796834308148168190}
+  altUrlInput: {fileID: 0}
   videoPlayerSelectButtonTemplate: {fileID: 5215436447127306290}
   videoPlayerSelectRoot: {fileID: 3322961673784676763}
   videoPlayerSelectPanel: {fileID: 1131719348066348434}
   videoPlayerSelectButton: {fileID: 5761850261178545779}
   cancelButton: {fileID: 8533432941130906217}
   urlInputConfirmButton: {fileID: 2522005100658211503}
+  enforcePlayImmediatelyButton: {fileID: 7542152422182541034}
   selectdPlayerText: {fileID: 1871437365707141800}
   selectdPlayerTMPro: {fileID: 0}
   queueModeText: {fileID: 4274047030299547134}
@@ -6609,6 +6611,18 @@ RectTransform:
 --- !u!114 &5761850261178545779 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4794575998525619557, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+    type: 3}
+  m_PrefabInstance: {fileID: 972765696443435798}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7542152422182541034 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7337752019902963196, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
     type: 3}
   m_PrefabInstance: {fileID: 972765696443435798}
   m_PrefabAsset: {fileID: 0}

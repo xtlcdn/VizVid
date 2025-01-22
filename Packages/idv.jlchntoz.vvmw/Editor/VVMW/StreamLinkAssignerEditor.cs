@@ -96,11 +96,14 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             coreSO = null;
         }
 
-        public override void OnInspectorGUI() {
-            base.OnInspectorGUI();
+        public override void DrawInspectorGUI() {
             if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
-            var serializedObject = this.serializedObject;
             serializedObject.Update();
+            DrawEmbeddedInspectorGUI();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        public override void DrawEmbeddedInspectorGUI() {
             DrawNecessaryFields();
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(currentUserOnlyProperty);
@@ -110,7 +113,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             EditorGUILayout.PropertyField(inputFieldToCopyProperty);
             EditorGUILayout.PropertyField(regenerateButtonProperty);
             EditorGUILayout.PropertyField(playButtonProperty);
-            serializedObject.ApplyModifiedProperties();
         }
 
         protected void DrawNecessaryFields() {

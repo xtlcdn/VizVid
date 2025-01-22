@@ -6,6 +6,10 @@ namespace JLChnToZ.VRC.VVMW.Editors {
     public class RateLimitResolverEditor : VVMWEditorBase {
         public override void OnInspectorGUI() {
             if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
+            DrawInspectorGUI();
+        }
+
+        public override void DrawInspectorGUI() {
             EditorGUILayout.HelpBox(i18n.GetOrDefault("JLChnToZ.VRC.VVMW.RateLimitResolver.message"), MessageType.Info);
         }
     }

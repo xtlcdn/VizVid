@@ -2696,12 +2696,14 @@ MonoBehaviour:
   handler: {fileID: 0}
   languageManager: {fileID: 0}
   urlInput: {fileID: 7249654291450956765}
+  altUrlInput: {fileID: 0}
   videoPlayerSelectButtonTemplate: {fileID: 7325389140067885576}
   videoPlayerSelectRoot: {fileID: 275978817871967137}
   videoPlayerSelectPanel: {fileID: 1700802910091646479}
   videoPlayerSelectButton: {fileID: 7079593761938854985}
   cancelButton: {fileID: 6603729787059918931}
   urlInputConfirmButton: {fileID: 1096071300831680661}
+  enforcePlayImmediatelyButton: {fileID: 4999816811691963600}
   selectdPlayerText: {fileID: 3760891699018846354}
   selectdPlayerTMPro: {fileID: 0}
   queueModeText: {fileID: 1628480545240872900}
@@ -2805,6 +2807,7 @@ MonoBehaviour:
   - {r: 0.03137255, g: 0.050980393, b: 0.047058824, a: 1}
   - {r: 0.21568628, g: 0.25882354, b: 0.30980393, a: 1}
   - {r: 0.27450982, g: 0.34509805, b: 0.43137255, a: 1}
+  appliedAutoConfigurators: []
 --- !u!1 &6165191218853122122
 GameObject:
   m_ObjectHideFlags: 0
@@ -6446,6 +6449,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4999816811691963600 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7337752019902963196, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+    type: 3}
+  m_PrefabInstance: {fileID: 2357076349875939628}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6603729787059918931 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8868481790311608703, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
@@ -6490,6 +6505,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7449210797366939644}
     m_Modifications:
+    - target: {fileID: 1928682645079549843, guid: 841e46d7359c4d641ac726e061f76c26,
+        type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1928682645079549843, guid: 841e46d7359c4d641ac726e061f76c26,
         type: 3}
       propertyPath: m_Value

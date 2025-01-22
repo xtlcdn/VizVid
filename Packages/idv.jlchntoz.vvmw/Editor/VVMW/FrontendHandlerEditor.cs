@@ -55,8 +55,8 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             PlayListEditorWindow.OnFrontendUpdated -= OnFrontEndUpdated;
         }
 
-        public override void OnInspectorGUI() {
-            base.OnInspectorGUI();
+
+        public override void DrawInspectorGUI() {
             if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
             serializedObject.Update();
             EditorGUILayout.PropertyField(coreProperty);
@@ -65,6 +65,13 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 coreSerializedObject?.Dispose();
                 coreSerializedObject = coreProperty.objectReferenceValue != null ? new SerializedObject(coreProperty.objectReferenceValue) : null;
             }
+            DrawEmbeddedInspectorGUI();
+            EditorGUILayout.Space();
+            targetsPropertyList.DoLayoutList();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        public override void DrawEmbeddedInspectorGUI() {
             using (var changed = new EditorGUI.ChangeCheckScope()) {
                 EditorGUILayout.PropertyField(enableQueueListProperty);
                 if (changed.changed &&
@@ -154,9 +161,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 if (GUILayout.Button(i18n.GetOrDefault("JLChnToZ.VRC.VVMW.FrontendHandler.locked:hint_link"), EditorStyles.linkLabel, GUILayout.ExpandWidth(false)))
                     Application.OpenURL("https://xtl.booth.pm/items/3826907");
             }
-            EditorGUILayout.Space();
-            targetsPropertyList.DoLayoutList();
-            serializedObject.ApplyModifiedProperties();
         }
 
         void OnFrontEndUpdated(FrontendHandler handler) {

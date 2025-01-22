@@ -59,7 +59,7 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         /// <summary>
-        /// How masny items left on the queue list or playlist.
+        /// How many items left on the queue list or playlist.
         /// </summary>
         public int PendingCount => localPlayListIndex > 0 ?
             Utilities.IsValid(localPlayListOrder) ? localPlayListOrder.Length : 0 :

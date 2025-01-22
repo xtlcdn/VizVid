@@ -50,6 +50,7 @@ SpriteAtlas:
     isAtlasV2: 0
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
+    - 3ae3251004e02da44b8784356228b558: 21300000
     - 536edc40e547845429a5e510930f3fc7: 21300000
     - ce8194118455f0d47842edec4628d702: 21300000
     - 0dc1ee037a83e3f4a98df64428a9c209: 21300000
@@ -58,6 +59,8 @@ SpriteAtlas:
     - 5ea2bef4ef7e4d24b85faa8c8f17cf9f: 21300000
     - d1d9065519fdee040901ab9e82d37df9: 21300000
     - d910c8063a1efa6478d1d5ccbda5e28b: 21300000
+    - b2a8c876296fd5846a08d1ae5994907f: 21300000
+    - 6a1702b603353a1499f929c72ce23a00: 21300000
     - 31b06b170ce7711428d4e6e35dfeee7f: 21300000
     - ae65152804ea10a409d1edd8f7e24baa: 21300000
     - ffaef788ec158144b8a203d98457d5ba: 21300000
@@ -79,6 +82,7 @@ SpriteAtlas:
     - 2bf5ccff57c319b4093ac1dde810e309: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 3ae3251004e02da44b8784356228b558, type: 3}
   - {fileID: 21300000, guid: 536edc40e547845429a5e510930f3fc7, type: 3}
   - {fileID: 21300000, guid: ce8194118455f0d47842edec4628d702, type: 3}
   - {fileID: 21300000, guid: 0dc1ee037a83e3f4a98df64428a9c209, type: 3}
@@ -87,6 +91,8 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 5ea2bef4ef7e4d24b85faa8c8f17cf9f, type: 3}
   - {fileID: 21300000, guid: d1d9065519fdee040901ab9e82d37df9, type: 3}
   - {fileID: 21300000, guid: d910c8063a1efa6478d1d5ccbda5e28b, type: 3}
+  - {fileID: 21300000, guid: b2a8c876296fd5846a08d1ae5994907f, type: 3}
+  - {fileID: 21300000, guid: 6a1702b603353a1499f929c72ce23a00, type: 3}
   - {fileID: 21300000, guid: 31b06b170ce7711428d4e6e35dfeee7f, type: 3}
   - {fileID: 21300000, guid: ae65152804ea10a409d1edd8f7e24baa, type: 3}
   - {fileID: 21300000, guid: ffaef788ec158144b8a203d98457d5ba, type: 3}
@@ -107,6 +113,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6663178faa69b664eb9f46c77e745163, type: 3}
   - {fileID: 21300000, guid: 2bf5ccff57c319b4093ac1dde810e309, type: 3}
   m_PackedSpriteNamesToIndex:
+  - UI_Notification
   - UI_Arrow
   - UI_grab_on
   - UI_Sound
@@ -115,6 +122,8 @@ SpriteAtlas:
   - UI_Replay_off
   - UI_Next
   - UI_level
+  - UI_Enter_list
+  - UI_Enter_Play
   - UI_Bright
   - UI_Delay_B
   - UI_ArrowUp

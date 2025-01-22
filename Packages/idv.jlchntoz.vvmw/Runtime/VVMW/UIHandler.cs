@@ -48,6 +48,8 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel] Button cancelButton;
         [BindEvent(nameof(Button.onClick), nameof(_InputConfirmClick))]
         [SerializeField, LocalizedLabel] Button urlInputConfirmButton;
+        [BindEvent(nameof(Button.onClick), nameof(_EnforceImmedPlayClick))]
+        [SerializeField, LocalizedLabel] Button enforcePlayImmediatelyButton;
         [TMProMigratable(nameof(selectdPlayerTMPro))]
         [SerializeField, LocalizedLabel] Text selectdPlayerText;
         [SerializeField, LocalizedLabel] TextMeshProUGUI selectdPlayerTMPro;
@@ -159,7 +161,6 @@ namespace JLChnToZ.VRC.VVMW {
 
         bool hasUpdate, wasUnlocked, hasUnlockInit;
         byte selectedPlayer = 1;
-        int interactTriggerId;
         DateTime joinTime, playListLastInteractTime;
         TimeSpan interactCoolDown = TimeSpan.FromSeconds(5);
         bool afterFirstRun;
@@ -478,10 +479,10 @@ namespace JLChnToZ.VRC.VVMW {
                 }
                 if (Utilities.IsValid(shuffleOnButton)) shuffleOnButton.gameObject.SetActive(isShuffle);
                 UpdatePlayList();
-                SetLocalizedText(queueModeText, queueModeTMPro,
-                    handler.PlayListIndex == 0 && handler.HasQueueList && (core.IsReady || core.IsLoading || handler.QueueUrls.Length > 0) ?
-                    "QueueModeNext" : "QueueModeInstant"
-                );
+                bool willPlayNext = handler.PlayListIndex == 0 && handler.HasQueueList && (core.IsReady || core.IsLoading || handler.QueueUrls.Length > 0);
+                if (Utilities.IsValid(urlInputConfirmButton) && Utilities.IsValid(enforcePlayImmediatelyButton))
+                    enforcePlayImmediatelyButton.gameObject.SetActive(willPlayNext);
+                SetLocalizedText(queueModeText, queueModeTMPro, willPlayNext ? "QueueModeNext" : "QueueModeInstant");
             } else {
                 bool isRepeatOne = core.Loop;
                 if (Utilities.IsValid(repeatOffButton)) repeatOffButton.gameObject.SetActive(!isRepeatOne);

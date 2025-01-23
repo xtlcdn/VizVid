@@ -35,6 +35,7 @@ namespace JLChnToZ.VRC.VVMW {
         [NonSerialized] public int entryOffset;
         [NonSerialized] public int spawnedEntryCount = 1;
         [NonSerialized] public int pooledEntryOffset, pooledEntryCount;
+        [NonSerialized] public bool isUpwards;
         float height;
         int lastOffset = -1;
         bool isSelected;
@@ -92,7 +93,9 @@ namespace JLChnToZ.VRC.VVMW {
         bool UpdateIndex() {
             if (!Utilities.IsValid(rectTransform)) rectTransform = GetComponent<RectTransform>();
             if (!Utilities.IsValid(parentRectTransform)) parentRectTransform = rectTransform.parent.GetComponent<RectTransform>();
-            int newOffset = Mathf.FloorToInt((-parentRectTransform.anchoredPosition.y / rectTransform.rect.height - entryOffset - 1) / spawnedEntryCount + 1) * spawnedEntryCount + entryOffset;
+            float anchoredPosition = parentRectTransform.anchoredPosition.y;
+            if (isUpwards) anchoredPosition = -anchoredPosition;
+            int newOffset = Mathf.FloorToInt((anchoredPosition / rectTransform.rect.height - entryOffset - 1) / spawnedEntryCount + 1) * spawnedEntryCount + entryOffset;
             if (lastOffset == newOffset) return false;
             lastOffset = newOffset;
             return true;
@@ -103,7 +106,9 @@ namespace JLChnToZ.VRC.VVMW {
             if (!Utilities.IsValid(rectTransform)) rectTransform = GetComponent<RectTransform>();
             if (lastOffset >= 0 && lastOffset < pooledEntryCount) {
                 _UpdateContent();
-                rectTransform.anchoredPosition = new Vector2(0, lastOffset * rectTransform.rect.height);
+                float offset = lastOffset;
+                if (isUpwards) offset = -offset;
+                rectTransform.anchoredPosition = new Vector2(0, offset * rectTransform.rect.height);
                 gameObject.SetActive(true);
             } else {
                 gameObject.SetActive(false);

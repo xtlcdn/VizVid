@@ -33,6 +33,7 @@ namespace JLChnToZ.VRC.VVMW {
         bool canDelete = true;
         [FieldChangeCallback(nameof(CanInteract))]
         bool canInteract = true;
+        bool isUpwards;
         public bool autoSelect = true;
         int offset, count;
         RectTransform viewportRect, contentRect, templateRect;
@@ -126,6 +127,7 @@ namespace JLChnToZ.VRC.VVMW {
                 scrollRect = GetComponent<ScrollRect>();
                 viewportRect = scrollRect.viewport;
                 contentRect = scrollRect.content;
+                isUpwards = contentRect.pivot.y < 0.5F;
                 var transformsAfterEntry = new Transform[contentRect.childCount];
                 int count = 0;
                 for (int i = contentRect.childCount - 1; i >= 0; i--) {
@@ -146,6 +148,7 @@ namespace JLChnToZ.VRC.VVMW {
                     entry.asPooledEntry = true;
                     entry.indexAsUserData = true;
                     entry.callbackTarget = this;
+                    entry.isUpwards = isUpwards;
                     entry.callbackEventName = nameof(_OnEntryClick);
                     entry.deleteEventName = nameof(_OnEntryDelete);
                     entry.callbackVariableName = nameof(lastInteractIndex);
@@ -205,7 +208,9 @@ namespace JLChnToZ.VRC.VVMW {
         public void ScrollTo(int index) {
             if (!hasInit) return;
             var normalizedPosition = scrollRect.normalizedPosition;
-            normalizedPosition.y = count > entriesPerViewport ? Mathf.Clamp01(index / (count - entriesPerViewport)) : 0;
+            float pos = count > entriesPerViewport ? Mathf.Clamp01(index / (count - entriesPerViewport)) : 0;
+            if (!isUpwards) pos = 1 - pos;
+            normalizedPosition.y = pos;
             scrollRect.normalizedPosition = normalizedPosition;
         }
 

@@ -78,9 +78,12 @@ namespace JLChnToZ.VRC.VVMW {
                 playListLastInteractTime = joinTime;
                 if (Utilities.IsValid(handler)) {
                     handler.PlayUrl(url, altUrl, selectedPlayer);
-                    if (playImmediately && handler.HasQueueList) {
-                        int queue = handler.QueueUrls.Length;
-                        if (queue > 0) handler.PlayAt(0, queue - 1, false);
+                    if (handler.HasQueueList) {
+                        if (playImmediately) {
+                            int queue = handler.QueueUrls.Length;
+                            if (queue > 0) handler.PlayAt(0, queue - 1, false);
+                        } else if (Utilities.IsValid(playbackControlsAnimator))
+                            playbackControlsAnimator.SetTrigger(enqueueKey);
                     }
                     if (Utilities.IsValid(queueListScrollView))
                         SelectedPlayListIndex = handler.PlayListIndex;

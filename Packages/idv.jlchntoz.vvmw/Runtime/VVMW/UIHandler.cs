@@ -164,13 +164,14 @@ namespace JLChnToZ.VRC.VVMW {
         DateTime joinTime, playListLastInteractTime;
         TimeSpan interactCoolDown = TimeSpan.FromSeconds(5);
         bool afterFirstRun;
-        int initKey, playbackStateKey;
+        int initKey, playbackStateKey, enqueueKey;
 
         void OnEnable() {
             if (Utilities.IsValid(playbackControlsAnimator)) {
                 if (!afterFirstRun) {
                     initKey = Animator.StringToHash("Init");
                     playbackStateKey = Animator.StringToHash("PlaybackState");
+                    enqueueKey = Animator.StringToHash("Enqueue");
                 }
                 playbackControlsAnimator.SetTrigger(initKey);
             }
@@ -481,7 +482,7 @@ namespace JLChnToZ.VRC.VVMW {
                 UpdatePlayList();
                 bool willPlayNext = handler.PlayListIndex == 0 && handler.HasQueueList && (core.IsReady || core.IsLoading || handler.QueueUrls.Length > 0);
                 if (Utilities.IsValid(urlInputConfirmButton) && Utilities.IsValid(enforcePlayImmediatelyButton))
-                    enforcePlayImmediatelyButton.gameObject.SetActive(willPlayNext);
+                    urlInputConfirmButton.gameObject.SetActive(willPlayNext);
                 SetLocalizedText(queueModeText, queueModeTMPro, willPlayNext ? "QueueModeNext" : "QueueModeInstant");
             } else {
                 bool isRepeatOne = core.Loop;

@@ -107,7 +107,7 @@ namespace JLChnToZ.VRC.VVMW {
             if (lastOffset >= 0 && lastOffset < pooledEntryCount) {
                 _UpdateContent();
                 float offset = lastOffset;
-                if (isUpwards) offset = -offset;
+                if (!isUpwards) offset = -offset;
                 rectTransform.anchoredPosition = new Vector2(0, offset * rectTransform.rect.height);
                 gameObject.SetActive(true);
             } else {

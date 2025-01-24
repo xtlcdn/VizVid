@@ -20,6 +20,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
     [CustomEditor(typeof(Core))]
     public class CoreEditor : VVMWEditorBase {
         static readonly Dictionary<Type, (FieldInfo fieldInfo, Type editorType)> controllableTypes = new Dictionary<Type, (FieldInfo, Type)>();
+        static readonly Dictionary<Type, Type> editorTypes = new Dictionary<Type, Type>();
         readonly Dictionary<Core, UdonSharpBehaviour> autoPlayControllers = new Dictionary<Core, UdonSharpBehaviour>();
         static readonly string[] materialModeOptions = new string[3];
         static string[] playerNames;
@@ -55,6 +56,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         SerializedReorderableList playerHandlersList, audioSourcesList, targetsList;
         List<bool> screenTargetVisibilityState;
         Editor autoPlayControllerEditor;
+        Editor[] playerHandlerEditors;
 
         static CoreEditor() {
             AssemblyReloadEvents.afterAssemblyReload += GatherControlledTypes;
@@ -107,6 +109,9 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         protected override void OnDisable() {
             base.OnDisable();
             if (autoPlayControllerEditor) DestroyImmediate(autoPlayControllerEditor);
+            if (playerHandlerEditors != null)
+                foreach (var editor in playerHandlerEditors)
+                    if (editor) DestroyImmediate(editor);
         }
 
         public override void DrawInspectorGUI() {
@@ -122,12 +127,11 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             EditorGUILayout.PropertyField(retryDelayProperty);
             EditorGUILayout.PropertyField(timeDriftDetectThresholdProperty);
             EditorGUILayout.Space();
-            playerHandlersList.DoLayoutList();
-            EditorGUILayout.Space();
+            DrawPlayerHandlers();
+            DrawScreenList();
             EditorGUILayout.PropertyField(defaultTextureProperty);
             if (defaultTextureProperty.objectReferenceValue == null)
                 EditorGUILayout.HelpBox(i18n.GetOrDefault("JLChnToZ.VRC.VVMW.Core.defaultTexture:empty_message"), MessageType.Error);
-            DrawScreenList();
             EditorGUILayout.PropertyField(broadcastScreenTextureProperty);
             if (broadcastScreenTextureProperty.boolValue)
                 EditorGUILayout.PropertyField(broadcastScreenTextureNameProperty);
@@ -167,6 +171,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                     controllerEditor.serializedObject.Update();
                     controllerEditor.DrawEmbeddedInspectorGUI();
                     controllerEditor.serializedObject.ApplyModifiedProperties();
+                    EditorGUILayout.Space();
                 } else if (GUILayout.Button(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.EditUrlsIn", controller.name)))
                     Selection.activeGameObject = controller.gameObject;
                 return;
@@ -207,6 +212,42 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 if (changed.changed) return true;
             }
             return false;
+        }
+
+        void DrawPlayerHandlers() {
+            bool expanded = playerHandlersProperty.isExpanded;
+            using (var change = new EditorGUI.ChangeCheckScope()) {
+                expanded = EditorGUILayout.Foldout(expanded, i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.playerHandlers"), true);
+                if (change.changed) playerHandlersProperty.isExpanded = expanded;
+            }
+            if (expanded)
+                playerHandlersList.DoLayoutList();
+            else {
+                int count = playerHandlersProperty.arraySize;
+                if (playerHandlerEditors == null || playerHandlerEditors.Length < count)
+                    playerHandlerEditors = new Editor[count];
+                using (new EditorGUI.IndentLevelScope())
+                for (int i = 0, drawnCount = 0; i < count; i++) {
+                    var playerHandlerProperty = playerHandlersProperty.GetArrayElementAtIndex(i);
+                    var playerHandler = playerHandlerProperty.objectReferenceValue as AbstractMediaPlayerHandler;
+                    if (!playerHandler) continue;
+                    if (editorTypes.TryGetValue(playerHandler.GetType(), out var editorType))
+                        CreateCachedEditor(playerHandler, editorType, ref playerHandlerEditors[i]);
+                    if (!(playerHandlerEditors[i] is VVMWEditorBase playerHandlerEditor)) continue;
+                    using (var change = new EditorGUI.ChangeCheckScope()) {
+                        expanded = EditorGUILayout.Foldout(playerHandlerProperty.isExpanded, $"{i18n.GetLocalizedContent(playerHandler.playerName)} ({playerHandler.name})", true);
+                        if (change.changed) playerHandlerProperty.isExpanded = expanded;
+                    }
+                    if (!expanded) continue;
+                    if (drawnCount++ > 0) EditorGUILayout.Space();
+                    using (new EditorGUILayout.VerticalScope(GUI.skin.box)) {
+                        playerHandlerEditor.serializedObject.Update();
+                        playerHandlerEditor.DrawEmbeddedInspectorGUI();
+                        playerHandlerEditor.serializedObject.ApplyModifiedProperties();
+                    }
+                }
+            }
+            EditorGUILayout.Space();
         }
 
         void DrawPlayerHandlersListHeader(Rect rect) {
@@ -569,17 +610,38 @@ namespace JLChnToZ.VRC.VVMW.Editors {
 
         static void GatherControlledTypes() {
             controllableTypes.Clear();
-            var customEditorMapping = new Dictionary<Type, Type>();
-            var inspectedTypeField = typeof(CustomEditor).GetField("m_InspectedType", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            var inheritedEditors = new Dictionary<Type, Type>();
+            var processedTypes = new HashSet<Type>();
+            var inspectedTypeField = typeof(CustomEditor).GetField("m_InspectedType", flags);
+            var editorForChildClassesField = typeof(CustomEditor).GetField("m_EditorForChildClasses", flags);
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
                 foreach (var type in assembly.GetTypes()) {
                     if (type.IsAbstract) continue;
                     if (type.IsSubclassOf(typeof(UdonSharpBehaviour))) {
+                        if (processedTypes.Add(type) && !editorTypes.ContainsKey(type)) {
+                            Type targetType = null;
+                            int score = 0;
+                            foreach (var inheritedEditor in inheritedEditors) {
+                                int currentScore = 0;
+                                for (var bt = type; bt != null; bt = bt.BaseType) {
+                                    if (bt == inheritedEditor.Key) {
+                                        if (currentScore > score) {
+                                            score = currentScore;
+                                            targetType = inheritedEditor.Value;
+                                        }
+                                        break;
+                                    }
+                                    currentScore--;
+                                }
+                            }
+                            if (targetType != null) editorTypes[type] = targetType;
+                        }
                         var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                         if (fields.Length == 0) continue;
                         foreach (var field in fields) {
                             if (field.FieldType == typeof(Core) && field.GetCustomAttribute<SingletonCoreControlAttribute>() != null) {
-                                customEditorMapping.TryGetValue(type, out var editorType);
+                                editorTypes.TryGetValue(type, out var editorType);
                                 controllableTypes[type] = (field, editorType);
                                 break;
                             }
@@ -590,8 +652,27 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                         var inspectedType = inspectedTypeField.GetValue(customEditorAttribute) as Type;
                         if (controllableTypes.TryGetValue(inspectedType, out var value))
                             controllableTypes[inspectedType] = (value.fieldInfo, type);
-                        else
-                            customEditorMapping[inspectedType] = type;
+                        editorTypes[inspectedType] = type;
+                        if ((bool)editorForChildClassesField.GetValue(customEditorAttribute)) {
+                            inheritedEditors[inspectedType] = type;
+                            foreach (var pType in processedTypes) {
+                                int baseScore = 0, currentScore = 0;
+                                if (editorTypes.TryGetValue(pType, out var editorType)) {
+                                    for (var bt = pType; bt != null; bt = bt.BaseType) {
+                                        if (bt == editorType) break;
+                                        baseScore--;
+                                    }
+                                } else
+                                    baseScore = int.MinValue;
+                                for (var bt = pType; bt != null; bt = bt.BaseType) {
+                                    if (bt == inspectedType) {
+                                        if (currentScore > baseScore) editorTypes[pType] = type;
+                                        break;
+                                    }
+                                    currentScore--;
+                                }
+                            }
+                        }
                     }
                 }
         }

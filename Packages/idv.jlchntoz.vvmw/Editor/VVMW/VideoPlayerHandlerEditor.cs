@@ -48,6 +48,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 return;
             }
             serializedObject.Update();
+            EditorGUILayout.PropertyField(playerNameProperty);
             DrawEmbeddedInspectorGUI();
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(i18n.GetLocalizedContent("HEADER:MeshRenderer"), EditorStyles.boldLabel);
@@ -82,7 +83,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
 
         public override void DrawEmbeddedInspectorGUI() {
             var target = this.target as VideoPlayerHandler;
-            EditorGUILayout.PropertyField(playerNameProperty);
             var controlledVideoPlayer = target.GetComponent<BaseVRCVideoPlayer>();
             if (controlledVideoPlayer is VRCUnityVideoPlayer unityVideoPlayer) {
                 EditorGUILayout.LabelField(i18n.GetLocalizedContent("HEADER:UnityVideoPlayer"), EditorStyles.boldLabel);

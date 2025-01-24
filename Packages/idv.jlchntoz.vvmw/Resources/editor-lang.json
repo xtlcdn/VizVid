@@ -338,6 +338,7 @@
         "JLChnToZ.VRC.VVMW.StreamLinkAssigner.playButton": "Play Button"
     },
     "zh-hant": {
+        "_alias": ["ZH-TR"],
         "VVMW.Remove": "移除",
         "VVMW.Mode": "模式",
         "VVMW.All": "全部",
@@ -677,6 +678,7 @@
         "JLChnToZ.VRC.VVMW.StreamLinkAssigner.playButton": "播放按鈕"
     },
     "zh-hans": {
+        "_alias": ["ZH-CN"],
         "VVMW.Remove": "移除",
         "VVMW.Mode": "模式",
         "VVMW.All": "全部",

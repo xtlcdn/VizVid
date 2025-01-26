@@ -131,8 +131,8 @@ namespace JLChnToZ.VRC.VVMW {
             bool isNotCoolingDown = (DateTime.UtcNow - playListLastInteractTime) >= interactCoolDown;
             if (isEntryContainerInactive || isNotCoolingDown)
                 SelectedPlayListIndex = selectedPlayListIndex = playListIndex;
-            if (Utilities.IsValid(playNextButton)) playNextButton.gameObject.SetActive(hasPending);
-            if (Utilities.IsValid(currentPlayListButton)) currentPlayListButton.gameObject.SetActive(hasPending && selectedPlayListIndex >= 0);
+            if (Utilities.IsValid(playNextButtonObject)) playNextButtonObject.SetActive(hasPending);
+            if (Utilities.IsValid(currentPlayListButtonObject)) currentPlayListButtonObject.SetActive(hasPending && selectedPlayListIndex >= 0);
             if (!string.IsNullOrEmpty(enqueueCountFormat))
                 SetText(enqueueCountText, enqueueCountTMPro, string.Format(enqueueCountFormat, pendingCount));
             if (selectedPlayListIndex > 0)

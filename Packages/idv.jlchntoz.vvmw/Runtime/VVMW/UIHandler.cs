@@ -44,59 +44,74 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel] GameObject videoPlayerSelectRoot, videoPlayerSelectPanel;
         [BindEvent(nameof(Button.onClick), nameof(_VideoPlayerSelect))]
         [SerializeField, LocalizedLabel] Button videoPlayerSelectButton;
+        [SerializeField, HideInInspector, Resolve(nameof(videoPlayerSelectButton), NullOnly = false)] GameObject videoPlayerSelectButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_InputCancelClick))]
         [SerializeField, LocalizedLabel] Button cancelButton;
+        [SerializeField, HideInInspector, Resolve(nameof(cancelButton), NullOnly = false)] GameObject cancelButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_InputConfirmClick))]
         [SerializeField, LocalizedLabel] Button urlInputConfirmButton;
+        [SerializeField, HideInInspector, Resolve(nameof(urlInputConfirmButton), NullOnly = false)] GameObject urlInputConfirmButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_EnforceImmedPlayClick))]
         [SerializeField, LocalizedLabel] Button enforcePlayImmediatelyButton;
-        [TMProMigratable(nameof(selectdPlayerTMPro))]
-        [SerializeField, LocalizedLabel] Text selectdPlayerText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI selectdPlayerTMPro;
-        [TMProMigratable(nameof(queueModeTMPro))]
-        [SerializeField, LocalizedLabel] Text queueModeText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI queueModeTMPro;
+        [SerializeField, LocalizedLabel] GameObject selectdPlayerObject;
+        [SerializeField, HideInInspector, Resolve(nameof(selectdPlayerObject), NullOnly = false)] Text selectdPlayerText;
+        [SerializeField, HideInInspector, Resolve(nameof(selectdPlayerObject), NullOnly = false)] TextMeshProUGUI selectdPlayerTMPro;
+        [SerializeField, LocalizedLabel] GameObject queueMode;
+        [SerializeField, HideInInspector, Resolve(nameof(queueMode), NullOnly = false)] Text queueModeText;
+        [SerializeField, HideInInspector, Resolve(nameof(queueMode), NullOnly = false)] TextMeshProUGUI queueModeTMPro;
         [SerializeField, LocalizedLabel] GameObject otherObjectUnderUrlInput;
 
         [LocalizedHeader("HEADER:Playback_Controls")]
         [SerializeField, LocalizedLabel] Animator playbackControlsAnimator;
         [BindEvent(nameof(Button.onClick), nameof(_Play))]
         [SerializeField, LocalizedLabel] Button playButton;
+        [SerializeField, HideInInspector, Resolve(nameof(playButton), NullOnly = false)] GameObject playButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_Pause))]
         [SerializeField, LocalizedLabel] Button pauseButton;
+        [SerializeField, HideInInspector, Resolve(nameof(pauseButton), NullOnly = false)] GameObject pauseButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_Stop))]
         [SerializeField, LocalizedLabel] Button stopButton;
+        [SerializeField, HideInInspector, Resolve(nameof(stopButton), NullOnly = false)] GameObject stopButtonObject;
+
         [BindEvent(nameof(Button.onClick), nameof(_LocalSync))]
         [SerializeField, LocalizedLabel] Button reloadButton;
+        [SerializeField, HideInInspector, Resolve(nameof(reloadButton), NullOnly = false)] GameObject reloadButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_GlobalSync))]
         [SerializeField, LocalizedLabel] Button globalReloadButton;
+        [SerializeField, HideInInspector, Resolve(nameof(globalReloadButton), NullOnly = false)] GameObject globalReloadButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_Skip))]
         [SerializeField, LocalizedLabel] Button playNextButton;
-        [TMProMigratable(nameof(enqueueCountTMPro))]
-        [SerializeField, LocalizedLabel] Text enqueueCountText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI enqueueCountTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(playNextButton), NullOnly = false)] GameObject playNextButtonObject;
+        [SerializeField, LocalizedLabel] GameObject enqueueCountObject;
+        [SerializeField, HideInInspector, Resolve(nameof(enqueueCountObject), NullOnly = false)] Text enqueueCountText;
+        [SerializeField, HideInInspector, Resolve(nameof(enqueueCountObject), NullOnly = false)] TextMeshProUGUI enqueueCountTMPro;
         [BindEvent(nameof(Button.onClick), nameof(_RepeatOne))]
         [SerializeField, LocalizedLabel] Button repeatOffButton;
+        [SerializeField, HideInInspector, Resolve(nameof(repeatOffButton), NullOnly = false)] GameObject repeatOffButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_RepeatAll))]
         [SerializeField, LocalizedLabel] Button repeatOneButton;
+        [SerializeField, HideInInspector, Resolve(nameof(repeatOneButton), NullOnly = false)] GameObject repeatOneButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_RepeatOff))]
         [FormerlySerializedAs("RepeatAllButton")]
         [SerializeField, LocalizedLabel] Button repeatAllButton;
+        [SerializeField, HideInInspector, Resolve(nameof(repeatAllButton), NullOnly = false)] GameObject repeatAllButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_ShuffleOn))]
         [SerializeField, LocalizedLabel] Button shuffleOffButton;
+        [SerializeField, HideInInspector, Resolve(nameof(shuffleOffButton), NullOnly = false)] GameObject shuffleOffButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_ShuffleOff))]
         [SerializeField, LocalizedLabel] Button shuffleOnButton;
+        [SerializeField, HideInInspector, Resolve(nameof(shuffleOnButton), NullOnly = false)] GameObject shuffleOnButtonObject;
         [BindEvent(nameof(Toggle.onValueChanged), nameof(_PlayListToggle))]
         [SerializeField, LocalizedLabel] Toggle playlistToggle;
         [BindEvent(nameof(Slider.onValueChanged), nameof(_OnSeek))]
         [SerializeField, LocalizedLabel] Slider progressSlider;
-        [TMProMigratable(nameof(statusTMPro))]
-        [SerializeField, LocalizedLabel] Text statusText;
-        [TMProMigratable(nameof(timeTMPro))]
-        [SerializeField, LocalizedLabel] Text timeText;
-        [TMProMigratable(nameof(durationTMPro))]
-        [SerializeField, LocalizedLabel] Text durationText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI statusTMPro, timeTMPro, durationTMPro;
+        [SerializeField, LocalizedLabel] GameObject statusObject, timeObject, durationObject;
+        [SerializeField, HideInInspector, Resolve(nameof(statusObject), NullOnly = false)] Text statusText;
+        [SerializeField, HideInInspector, Resolve(nameof(timeObject), NullOnly = false)] Text timeText;
+        [SerializeField, HideInInspector, Resolve(nameof(durationObject), NullOnly = false)] Text durationText;
+        [SerializeField, HideInInspector, Resolve(nameof(statusObject), NullOnly = false)] TextMeshProUGUI statusTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(timeObject), NullOnly = false)] TextMeshProUGUI timeTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(durationObject), NullOnly = false)] TextMeshProUGUI durationTMPro;
         [SerializeField, LocalizedLabel] GameObject timeContainer;
 
         [LocalizedHeader("HEADER:Volume_Control")]
@@ -104,6 +119,8 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel] Slider volumeSlider;
         [BindEvent(nameof(Button.onClick), nameof(_OnMute))]
         [SerializeField, LocalizedLabel] Button muteButton, unmuteButton;
+        [SerializeField, HideInInspector, Resolve(nameof(muteButton), NullOnly = false)] GameObject muteButtonObject;
+        [SerializeField, HideInInspector, Resolve(nameof(unmuteButton), NullOnly = false)] GameObject unmuteButtonObject;
 
         [LocalizedHeader("HEADER:Idle_Screen")]
         [SerializeField, LocalizedLabel] GameObject idleScreenRoot;
@@ -115,43 +132,54 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel] Button playListTogglePanelButton;
         [SerializeField, LocalizedLabel, BindUdonSharpEvent] PooledScrollView queueListScrollView;
         [SerializeField, LocalizedLabel] GameObject playNextIndicator;
-        [TMProMigratable(nameof(selectedPlayListTMPro))]
-        [SerializeField, LocalizedLabel] Text selectedPlayListText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI selectedPlayListTMPro;
+        [SerializeField, LocalizedLabel] GameObject selectedPlayListObject;
+        [SerializeField, HideInInspector, Resolve(nameof(selectedPlayListObject), NullOnly = false)] Text selectedPlayListText;
+        [SerializeField, HideInInspector, Resolve(nameof(selectedPlayListObject), NullOnly = false)] TextMeshProUGUI selectedPlayListTMPro;
         [BindEvent(nameof(Button.onClick), nameof(_OnCurrentPlayListSelectClick))]
         [SerializeField, LocalizedLabel] Button currentPlayListButton;
+        [SerializeField, HideInInspector, Resolve(nameof(currentPlayListButton), NullOnly = false)] GameObject currentPlayListButtonObject;
 
         [LocalizedHeader("HEADER:Sync_Offset_Controls")]
         [SerializeField, LocalizedLabel] GameObject shiftControlsRoot;
         [BindEvent(nameof(Button.onClick), nameof(_ShiftBackL))]
         [SerializeField, LocalizedLabel, FormerlySerializedAs("shiftBack100msButton")] Button shiftBackLButton;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftBackLButton), NullOnly = false)] GameObject shiftBackLButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_ShiftBackS))]
         [SerializeField, LocalizedLabel, FormerlySerializedAs("shiftBack50msButton")] Button shiftBackSButton;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftBackSButton), NullOnly = false)] GameObject shiftBackSButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_ShiftForwardS))]
         [SerializeField, LocalizedLabel, FormerlySerializedAs("shiftForward50msButton")] Button shiftForwardSButton;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftForwardSButton), NullOnly = false)] GameObject shiftForwardSButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_ShiftForwardL))]
         [SerializeField, LocalizedLabel, FormerlySerializedAs("shiftForward100msButton")] Button shiftForwardLButton;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftForwardLButton), NullOnly = false)] GameObject shiftForwardLButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_ShiftReset))]
         [SerializeField, LocalizedLabel] Button shiftResetButton;
-        [TMProMigratable(nameof(shiftOffsetTMPro))]
-        [SerializeField, LocalizedLabel] Text shiftOffsetText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI shiftOffsetTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftResetButton), NullOnly = false)] GameObject shiftResetButtonObject;
+        [SerializeField, LocalizedLabel] GameObject shiftOffsetObject;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftOffsetObject), NullOnly = false)] Text shiftOffsetText;
+        [SerializeField, HideInInspector, Resolve(nameof(shiftOffsetObject), NullOnly = false)] TextMeshProUGUI shiftOffsetTMPro;
 
         [LocalizedHeader("HEADER:Speed_Adjustment_Controls")]
         [SerializeField, LocalizedLabel] GameObject speedControlsRoot;
         [BindEvent(nameof(Button.onClick), nameof(_SpeedDownL))]
         [SerializeField, LocalizedLabel] Button speedDownLButton;
+        [SerializeField, HideInInspector, Resolve(nameof(speedDownLButton), NullOnly = false)] GameObject speedDownLButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_SpeedDownS))]
         [SerializeField, LocalizedLabel] Button speedDownSButton;
+        [SerializeField, HideInInspector, Resolve(nameof(speedDownSButton), NullOnly = false)] GameObject speedDownSButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_SpeedUpS))]
         [SerializeField, LocalizedLabel] Button speedUpSButton;
+        [SerializeField, HideInInspector, Resolve(nameof(speedUpSButton), NullOnly = false)] GameObject speedUpSButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_SpeedUpL))]
         [SerializeField, LocalizedLabel] Button speedUpLButton;
+        [SerializeField, HideInInspector, Resolve(nameof(speedUpLButton), NullOnly = false)] GameObject speedUpLButtonObject;
         [BindEvent(nameof(Button.onClick), nameof(_SpeedReset))]
         [SerializeField, LocalizedLabel] Button speedResetButton;
-        [TMProMigratable(nameof(speedOffsetTMPro))]
-        [SerializeField, LocalizedLabel] Text speedOffsetText;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI speedOffsetTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(speedResetButton), NullOnly = false)] GameObject speedResetButtonObject;
+        [SerializeField, LocalizedLabel] GameObject speedOffsetObject;
+        [SerializeField, HideInInspector, Resolve(nameof(speedOffsetObject), NullOnly = false)] Text speedOffsetText;
+        [SerializeField, HideInInspector, Resolve(nameof(speedOffsetObject), NullOnly = false)] TextMeshProUGUI speedOffsetTMPro;
 
         [LocalizedHeader("HEADER:Screen_Controls")]
         [BindEvent(nameof(Slider.onValueChanged), nameof(_OnLuminanceSliderChanged))]
@@ -326,10 +354,10 @@ namespace JLChnToZ.VRC.VVMW {
             if (!afterFirstRun) return;
             if (Utilities.IsValid(volumeSlider))
                 volumeSlider.SetValueWithoutNotify(core.Volume);
-            if (Utilities.IsValid(muteButton) && Utilities.IsValid(unmuteButton)) {
+            if (Utilities.IsValid(muteButtonObject) && Utilities.IsValid(unmuteButtonObject)) {
                 var muted = core.Muted;
-                muteButton.gameObject.SetActive(!muted);
-                unmuteButton.gameObject.SetActive(muted);
+                muteButtonObject.SetActive(!muted);
+                unmuteButtonObject.SetActive(muted);
             }
         }
 
@@ -430,10 +458,10 @@ namespace JLChnToZ.VRC.VVMW {
                 var localUrl = core.Url;
                 canLocalSync = !VRCUrl.IsNullOrEmpty(localUrl);
             }
-            if (Utilities.IsValid(playButton)) playButton.gameObject.SetActive(canPlay);
-            if (Utilities.IsValid(pauseButton)) pauseButton.gameObject.SetActive(canPause);
-            if (Utilities.IsValid(stopButton)) stopButton.gameObject.SetActive(canStop);
-            if (Utilities.IsValid(reloadButton)) reloadButton.gameObject.SetActive(canLocalSync);
+            if (Utilities.IsValid(playButtonObject)) playButtonObject.SetActive(canPlay);
+            if (Utilities.IsValid(pauseButtonObject)) pauseButtonObject.SetActive(canPause);
+            if (Utilities.IsValid(stopButtonObject)) stopButtonObject.SetActive(canStop);
+            if (Utilities.IsValid(reloadButtonObject)) reloadButtonObject.SetActive(canLocalSync);
             if (Utilities.IsValid(progressSlider)) {
                 if (canSeek) {
                     UpdateProgressOnce();
@@ -471,29 +499,29 @@ namespace JLChnToZ.VRC.VVMW {
                 bool isRepeatOne = handler.RepeatOne;
                 bool isRepeatAll = handler.RepeatAll;
                 bool isShuffle = handler.Shuffle;
-                if (Utilities.IsValid(repeatOffButton)) repeatOffButton.gameObject.SetActive(!isRepeatOne && !isRepeatAll);
-                if (Utilities.IsValid(repeatOneButton)) repeatOneButton.gameObject.SetActive(isRepeatOne);
-                if (Utilities.IsValid(repeatAllButton)) repeatAllButton.gameObject.SetActive(isRepeatAll);
+                if (Utilities.IsValid(repeatOffButtonObject)) repeatOffButtonObject.SetActive(!isRepeatOne && !isRepeatAll);
+                if (Utilities.IsValid(repeatOneButtonObject)) repeatOneButtonObject.SetActive(isRepeatOne);
+                if (Utilities.IsValid(repeatAllButtonObject)) repeatAllButtonObject.SetActive(isRepeatAll);
                 if (Utilities.IsValid(shuffleOffButton)) {
-                    shuffleOffButton.gameObject.SetActive(!isShuffle);
+                    shuffleOffButtonObject.SetActive(!isShuffle);
                     shuffleOffButton.interactable = unlocked;
                 }
-                if (Utilities.IsValid(shuffleOnButton)) shuffleOnButton.gameObject.SetActive(isShuffle);
+                if (Utilities.IsValid(shuffleOnButtonObject)) shuffleOnButtonObject.SetActive(isShuffle);
                 UpdatePlayList();
                 bool willPlayNext = handler.PlayListIndex == 0 && handler.HasQueueList && (core.IsReady || core.IsLoading || handler.QueueUrls.Length > 0);
                 if (Utilities.IsValid(urlInputConfirmButton) && Utilities.IsValid(enforcePlayImmediatelyButton))
-                    urlInputConfirmButton.gameObject.SetActive(willPlayNext);
+                    urlInputConfirmButtonObject.SetActive(willPlayNext);
                 SetLocalizedText(queueModeText, queueModeTMPro, willPlayNext ? "QueueModeNext" : "QueueModeInstant");
             } else {
                 bool isRepeatOne = core.Loop;
-                if (Utilities.IsValid(repeatOffButton)) repeatOffButton.gameObject.SetActive(!isRepeatOne);
-                if (Utilities.IsValid(repeatOneButton)) repeatOneButton.gameObject.SetActive(isRepeatOne);
-                if (Utilities.IsValid(repeatAllButton)) repeatAllButton.gameObject.SetActive(false);
-                if (Utilities.IsValid(shuffleOffButton)) {
-                    shuffleOffButton.gameObject.SetActive(true);
+                if (Utilities.IsValid(repeatOffButtonObject)) repeatOffButtonObject.SetActive(!isRepeatOne);
+                if (Utilities.IsValid(repeatOneButtonObject)) repeatOneButtonObject.SetActive(isRepeatOne);
+                if (Utilities.IsValid(repeatAllButtonObject)) repeatAllButtonObject.SetActive(false);
+                if (Utilities.IsValid(shuffleOffButtonObject)) {
+                    shuffleOffButtonObject.SetActive(true);
                     shuffleOffButton.interactable = false;
                 }
-                if (Utilities.IsValid(shuffleOnButton)) shuffleOnButton.gameObject.SetActive(false);
+                if (Utilities.IsValid(shuffleOnButton)) shuffleOnButtonObject.SetActive(false);
                 SetLocalizedText(queueModeText, queueModeTMPro, "QueueModeInstant");
             }
             bool canChangeSpeed = unlocked && core.SupportSpeedAdjustment;

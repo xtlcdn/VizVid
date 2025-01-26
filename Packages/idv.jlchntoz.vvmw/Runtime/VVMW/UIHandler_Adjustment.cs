@@ -6,12 +6,12 @@ namespace JLChnToZ.VRC.VVMW {
             bool isSynced = core.IsSynced;
             if (Utilities.IsValid(shiftControlsRoot)) shiftControlsRoot.SetActive(isSynced);
             else {
-                if (Utilities.IsValid(shiftBackLButton)) shiftBackLButton.gameObject.SetActive(isSynced);
-                if (Utilities.IsValid(shiftBackSButton)) shiftBackSButton.gameObject.SetActive(isSynced);
-                if (Utilities.IsValid(shiftForwardSButton)) shiftForwardSButton.gameObject.SetActive(isSynced);
-                if (Utilities.IsValid(shiftForwardLButton)) shiftForwardLButton.gameObject.SetActive(isSynced);
-                if (Utilities.IsValid(shiftResetButton)) shiftResetButton.gameObject.SetActive(isSynced);
-                if (Utilities.IsValid(shiftOffsetText)) shiftOffsetText.gameObject.SetActive(isSynced);
+                if (Utilities.IsValid(shiftBackLButtonObject)) shiftBackLButtonObject.SetActive(isSynced);
+                if (Utilities.IsValid(shiftBackSButtonObject)) shiftBackSButtonObject.SetActive(isSynced);
+                if (Utilities.IsValid(shiftForwardSButtonObject)) shiftForwardSButtonObject.SetActive(isSynced);
+                if (Utilities.IsValid(shiftForwardLButtonObject)) shiftForwardLButtonObject.SetActive(isSynced);
+                if (Utilities.IsValid(shiftResetButtonObject)) shiftResetButtonObject.SetActive(isSynced);
+                if (Utilities.IsValid(shiftOffsetObject)) shiftOffsetObject.SetActive(isSynced);
             }
         }
 

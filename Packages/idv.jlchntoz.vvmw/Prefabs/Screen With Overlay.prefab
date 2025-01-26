@@ -4360,30 +4360,50 @@ MonoBehaviour:
   videoPlayerSelectRoot: {fileID: 3322961673784676763}
   videoPlayerSelectPanel: {fileID: 1131719348066348434}
   videoPlayerSelectButton: {fileID: 5761850261178545779}
+  videoPlayerSelectButtonObject: {fileID: 0}
   cancelButton: {fileID: 8533432941130906217}
+  cancelButtonObject: {fileID: 0}
   urlInputConfirmButton: {fileID: 2522005100658211503}
+  urlInputConfirmButtonObject: {fileID: 0}
   enforcePlayImmediatelyButton: {fileID: 7542152422182541034}
+  selectdPlayerObject: {fileID: 321960494071592266}
   selectdPlayerText: {fileID: 1871437365707141800}
   selectdPlayerTMPro: {fileID: 0}
-  queueModeText: {fileID: 4274047030299547134}
+  queueMode: {fileID: 0}
+  queueModeText: {fileID: 0}
   queueModeTMPro: {fileID: 0}
   otherObjectUnderUrlInput: {fileID: 1832616573580324778}
   playbackControlsAnimator: {fileID: 8193631149065468083}
   playButton: {fileID: 7796722855169674898}
+  playButtonObject: {fileID: 0}
   pauseButton: {fileID: 4042597508900246363}
+  pauseButtonObject: {fileID: 0}
   stopButton: {fileID: 1794345020738761530}
+  stopButtonObject: {fileID: 0}
   reloadButton: {fileID: 3065070243145332765}
+  reloadButtonObject: {fileID: 0}
   globalReloadButton: {fileID: 0}
+  globalReloadButtonObject: {fileID: 0}
   playNextButton: {fileID: 6113559061238110570}
+  playNextButtonObject: {fileID: 0}
+  enqueueCountObject: {fileID: 6292227275025181808}
   enqueueCountText: {fileID: 7243952161894959004}
   enqueueCountTMPro: {fileID: 0}
   repeatOffButton: {fileID: 9039282186901071159}
+  repeatOffButtonObject: {fileID: 0}
   repeatOneButton: {fileID: 2709535250364749467}
+  repeatOneButtonObject: {fileID: 0}
   repeatAllButton: {fileID: 4675328042641458222}
+  repeatAllButtonObject: {fileID: 0}
   shuffleOffButton: {fileID: 3265269662769388318}
+  shuffleOffButtonObject: {fileID: 0}
   shuffleOnButton: {fileID: 8098896875551257563}
+  shuffleOnButtonObject: {fileID: 0}
   playlistToggle: {fileID: 0}
   progressSlider: {fileID: 7555417570359077007}
+  statusObject: {fileID: 1832616573580324778}
+  timeObject: {fileID: 7827005280596809956}
+  durationObject: {fileID: 6388045471416033426}
   statusText: {fileID: 4081750117402772080}
   timeText: {fileID: 1831172172697254301}
   durationText: {fileID: 5749459164001069690}
@@ -4394,29 +4414,45 @@ MonoBehaviour:
   volumeSlider: {fileID: 8001222877319417337}
   muteButton: {fileID: 2813640105949131958}
   unmuteButton: {fileID: 4786021404162420626}
+  muteButtonObject: {fileID: 0}
+  unmuteButtonObject: {fileID: 0}
   idleScreenRoot: {fileID: 6898517154084395741}
   playListPanelRoot: {fileID: 6751938479174443565}
   playListScrollView: {fileID: 8637889106835254093}
   playListTogglePanelButton: {fileID: 4945338202527484620}
   queueListScrollView: {fileID: 4136825756390268076}
   playNextIndicator: {fileID: 0}
+  selectedPlayListObject: {fileID: 5651099101458423496}
   selectedPlayListText: {fileID: 573662285814026412}
   selectedPlayListTMPro: {fileID: 0}
   currentPlayListButton: {fileID: 5065227983473882738}
+  currentPlayListButtonObject: {fileID: 0}
   shiftControlsRoot: {fileID: 0}
   shiftBackLButton: {fileID: 2688631826079340242}
+  shiftBackLButtonObject: {fileID: 0}
   shiftBackSButton: {fileID: 5644903411782385773}
+  shiftBackSButtonObject: {fileID: 0}
   shiftForwardSButton: {fileID: 1844821558039814214}
+  shiftForwardSButtonObject: {fileID: 0}
   shiftForwardLButton: {fileID: 5215060939886370506}
+  shiftForwardLButtonObject: {fileID: 0}
   shiftResetButton: {fileID: 1953999595961846628}
+  shiftResetButtonObject: {fileID: 0}
+  shiftOffsetObject: {fileID: 6768232005735735457}
   shiftOffsetText: {fileID: 3235232710273548969}
   shiftOffsetTMPro: {fileID: 0}
   speedControlsRoot: {fileID: 0}
   speedDownLButton: {fileID: 8689841568361731248}
+  speedDownLButtonObject: {fileID: 0}
   speedDownSButton: {fileID: 1405629983219843599}
+  speedDownSButtonObject: {fileID: 0}
   speedUpSButton: {fileID: 4921708533732942372}
+  speedUpSButtonObject: {fileID: 0}
   speedUpLButton: {fileID: 1551748389520678056}
+  speedUpLButtonObject: {fileID: 0}
   speedResetButton: {fileID: 5100736681360427270}
+  speedResetButtonObject: {fileID: 0}
+  speedOffsetObject: {fileID: 16575813349925571}
   speedOffsetText: {fileID: 8156775085505462475}
   speedOffsetTMPro: {fileID: 0}
   luminanceSlider: {fileID: 8738111233399372858}
@@ -6147,6 +6183,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -30
       objectReference: {fileID: 0}
+    - target: {fileID: 4361288004046776770, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 4361288004046776770, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+        type: 3}
     - target: {fileID: 4697929201151263650, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6258,6 +6300,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: ca60e82c5138fc94a9bd38f31e4c81fc,
         type: 2}
+    - target: {fileID: 5045953502661462311, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5045953502661462311, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+        type: 3}
     - target: {fileID: 5788622370935596912, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -6299,6 +6347,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee, type: 3}
+--- !u!1 &321960494071592266 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 650805752153964124, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+    type: 3}
+  m_PrefabInstance: {fileID: 972765696443435798}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1131719348066348434 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 201353560181188228, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
@@ -6311,7 +6365,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 972765696443435798}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 321960494071592266}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
@@ -6335,18 +6389,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 972765696443435798}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4274047030299547134 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3904482467991723752, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
-    type: 3}
-  m_PrefabInstance: {fileID: 972765696443435798}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5215436447127306290 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4980707339978165028, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
@@ -7861,6 +7903,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 047627ef6a061aa4f8411c8d563f2ecc, type: 3}
+--- !u!1 &16575813349925571 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4167174549614489180, guid: 047627ef6a061aa4f8411c8d563f2ecc,
+    type: 3}
+  m_PrefabInstance: {fileID: 4174314250740960415}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &439151482369130447 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4608881454669542224, guid: 047627ef6a061aa4f8411c8d563f2ecc,
@@ -7927,7 +7975,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4174314250740960415}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 16575813349925571}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
@@ -9296,7 +9344,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7221891484862058237}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6768232005735735457}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
@@ -9329,6 +9377,12 @@ MonoBehaviour:
 --- !u!224 &6615604548988419501 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4608881454669542224, guid: 047627ef6a061aa4f8411c8d563f2ecc,
+    type: 3}
+  m_PrefabInstance: {fileID: 7221891484862058237}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6768232005735735457 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4167174549614489180, guid: 047627ef6a061aa4f8411c8d563f2ecc,
     type: 3}
   m_PrefabInstance: {fileID: 7221891484862058237}
   m_PrefabAsset: {fileID: 0}
@@ -9819,13 +9873,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6292227275025181808 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2465739708489063855, guid: 974babfe7c734f3498b86d6585448abd,
+    type: 3}
+  m_PrefabInstance: {fileID: 8460691866838807007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7243952161894959004 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1291928848859575875, guid: 974babfe7c734f3498b86d6585448abd,
     type: 3}
   m_PrefabInstance: {fileID: 8460691866838807007}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6292227275025181808}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}

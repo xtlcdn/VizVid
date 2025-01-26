@@ -2448,6 +2448,7 @@ MonoBehaviour:
   languageManager: {fileID: 0}
   urlInput: {fileID: 7249654291450956765}
   altUrlInput: {fileID: 0}
+  altUrlInputObject: {fileID: 0}
   videoPlayerSelectButtonTemplate: {fileID: 7325389140067885576}
   videoPlayerSelectRoot: {fileID: 275978817871967137}
   videoPlayerSelectPanel: {fileID: 1700802910091646479}
@@ -2458,7 +2459,7 @@ MonoBehaviour:
   urlInputConfirmButton: {fileID: 1096071300831680661}
   urlInputConfirmButtonObject: {fileID: 0}
   enforcePlayImmediatelyButton: {fileID: 4999816811691963600}
-  selectdPlayerObject: {fileID: 3252147141784850804}
+  selectdPlayerObject: {fileID: 3007881258781808496}
   selectdPlayerText: {fileID: 3760891699018846354}
   selectdPlayerTMPro: {fileID: 0}
   queueMode: {fileID: 0}
@@ -2511,8 +2512,10 @@ MonoBehaviour:
   idleScreenRoot: {fileID: 0}
   playListPanelRoot: {fileID: 4428298100558888851}
   playListScrollView: {fileID: 1009697414144182726}
+  playListGameObject: {fileID: 0}
   playListTogglePanelButton: {fileID: 912951884492069905}
   queueListScrollView: {fileID: 2238140308991275377}
+  queueListScrollViewObject: {fileID: 0}
   playNextIndicator: {fileID: 7007343303285611290}
   selectedPlayListObject: {fileID: 4953464436314133354}
   selectedPlayListText: {fileID: 1906736415800344448}
@@ -6258,9 +6261,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3252147141784850804 stripped
+--- !u!1 &3007881258781808496 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 979522937075218520, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+  m_CorrespondingSourceObject: {fileID: 650805752153964124, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
     type: 3}
   m_PrefabInstance: {fileID: 2357076349875939628}
   m_PrefabAsset: {fileID: 0}
@@ -6270,7 +6273,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 2357076349875939628}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 3007881258781808496}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}

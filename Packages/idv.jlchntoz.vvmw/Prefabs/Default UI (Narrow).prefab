@@ -2567,7 +2567,7 @@ MonoBehaviour:
   urlInputConfirmButton: {fileID: 2854221936331231627}
   urlInputConfirmButtonObject: {fileID: 0}
   enforcePlayImmediatelyButton: {fileID: 7910808412703227342}
-  selectdPlayerObject: {fileID: 399639665844901994}
+  selectdPlayerObject: {fileID: 77714175010971246}
   selectdPlayerText: {fileID: 2061350802308454796}
   selectdPlayerTMPro: {fileID: 0}
   queueMode: {fileID: 0}
@@ -4701,9 +4701,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee, type: 3}
---- !u!1 &399639665844901994 stripped
+--- !u!1 &77714175010971246 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 979522937075218520, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
+  m_CorrespondingSourceObject: {fileID: 650805752153964124, guid: bd2ec73dfe9d6ef4e8b222c1a4fe9cee,
     type: 3}
   m_PrefabInstance: {fileID: 584404463052152882}
   m_PrefabAsset: {fileID: 0}
@@ -4713,7 +4713,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 584404463052152882}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 77714175010971246}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}

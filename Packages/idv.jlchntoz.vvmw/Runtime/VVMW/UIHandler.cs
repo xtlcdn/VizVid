@@ -255,7 +255,8 @@ namespace JLChnToZ.VRC.VVMW {
                 handler._Stop();
             else
                 core.Stop();
-            SetText(enqueueCountText, enqueueCountTMPro, string.Format(enqueueCountFormat, 0));
+            if (!string.IsNullOrEmpty(enqueueCountFormat))
+                SetText(enqueueCountText, enqueueCountTMPro, string.Format(enqueueCountFormat, 0));
             _InputCancelClick();
         }
 

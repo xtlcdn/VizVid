@@ -2556,6 +2556,7 @@ MonoBehaviour:
   languageManager: {fileID: 0}
   urlInput: {fileID: 7249654291450956765}
   altUrlInput: {fileID: 0}
+  altUrlInputObject: {fileID: 0}
   videoPlayerSelectButtonTemplate: {fileID: 5549347527116204822}
   videoPlayerSelectRoot: {fileID: 3134019309995457215}
   videoPlayerSelectPanel: {fileID: 1243247733899483628}
@@ -2586,7 +2587,7 @@ MonoBehaviour:
   globalReloadButtonObject: {fileID: 0}
   playNextButton: {fileID: 5256894202986480091}
   playNextButtonObject: {fileID: 0}
-  enqueueCountObject: {fileID: 0}
+  enqueueCountObject: {fileID: 5436407295074399425}
   enqueueCountText: {fileID: 8693131333163687725}
   enqueueCountTMPro: {fileID: 0}
   repeatOffButton: {fileID: 566990503289482660}
@@ -2619,8 +2620,10 @@ MonoBehaviour:
   idleScreenRoot: {fileID: 0}
   playListPanelRoot: {fileID: 4428298100558888851}
   playListScrollView: {fileID: 1009697414144182726}
+  playListGameObject: {fileID: 0}
   playListTogglePanelButton: {fileID: 912951884492069905}
   queueListScrollView: {fileID: 2238140308991275377}
+  queueListScrollViewObject: {fileID: 0}
   playNextIndicator: {fileID: 7007343303285611290}
   selectedPlayListObject: {fileID: 4953464436314133354}
   selectedPlayListText: {fileID: 1906736415800344448}
@@ -6569,6 +6572,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5436407295074399425 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2465739708489063855, guid: 974babfe7c734f3498b86d6585448abd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7586857361408567662}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7337735815327357268 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 908936894173098042, guid: 974babfe7c734f3498b86d6585448abd,
@@ -6581,7 +6590,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7586857361408567662}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5436407295074399425}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}

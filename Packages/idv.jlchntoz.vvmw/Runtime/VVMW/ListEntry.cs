@@ -13,13 +13,15 @@ namespace JLChnToZ.VRC.VVMW {
     [AddComponentMenu("VizVid/Components/List Entry")]
     [DefaultExecutionOrder(3)]
     public class ListEntry : UdonSharpBehaviour {
-        [TMProMigratable(nameof(contentTMPro))]
-        [SerializeField] Text content;
-        [SerializeField] TextMeshProUGUI contentTMPro;
+        [SerializeField] GameObject contentGameObject;
+        [SerializeField, HideInInspector, Resolve(nameof(contentGameObject), NullOnly = false)] Text content;
+        [SerializeField, HideInInspector, Resolve(nameof(contentGameObject), NullOnly = false)] TextMeshProUGUI contentTMPro;
         [BindEvent(nameof(Button.onClick), nameof(_OnClick))]
         [SerializeField] Button primaryButton;
         [BindEvent(nameof(Button.onClick), nameof(_OnDeleteClick))]
         [SerializeField] Button deleteButton;
+        [SerializeField, HideInInspector, Resolve(nameof(deleteButton))]
+        GameObject deleteButtonGO;
         [SerializeField] Color selectedColor, normalColor;
         RectTransform rectTransform, parentRectTransform;
         public UdonSharpBehaviour callbackTarget;
@@ -53,8 +55,8 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         public bool HasDelete {
-            get => deleteButton.gameObject.activeSelf;
-            set => deleteButton.gameObject.SetActive(value);
+            get => Utilities.IsValid(deleteButtonGO) && deleteButtonGO.activeSelf;
+            set => deleteButtonGO.SetActive(value);
         }
 
         public bool Unlocked {

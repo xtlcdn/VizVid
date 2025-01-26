@@ -15,6 +15,7 @@ namespace JLChnToZ.VRC.VVMW {
         AudioSource audioSource;
         [LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")]
         [SerializeField, Locatable, BindUdonSharpEvent] Core core;
+        [SerializeField, HideInInspector, Resolve(nameof(core), NullOnly = false)] GameObject coreGO;
         /// <summary>
         /// The target volume when the video is not playing.
         /// </summary>
@@ -31,13 +32,13 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         void OnEnable() {
-            isVideoPlaying = core.enabled && core.gameObject.activeSelf && core.IsPlaying && !core.IsStatic;
+            isVideoPlaying = core.enabled && coreGO.activeSelf && core.IsPlaying && !core.IsStatic;
         }
 
         void Update() {
             float targetVolune = isMuted || isVideoPlaying ? 0 : volume;
             audioSource.volume = fadeTime > 0 ? Mathf.MoveTowards(audioSource.volume, targetVolune, Time.deltaTime / fadeTime) : targetVolune;
-            if (isVideoPlaying && (!core.enabled || !core.gameObject.activeSelf)) isVideoPlaying = false;
+            if (isVideoPlaying && (!core.enabled || !coreGO.activeSelf)) isVideoPlaying = false;
         }
 
         /// <summary>

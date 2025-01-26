@@ -73,13 +73,13 @@ namespace JLChnToZ.VRC.VVMW {
                 playListScrollView.EntryNames = playListNames;
                 SelectedPlayListIndex = hasHandler ? handler.PlayListIndex : 0;
                 if (Utilities.IsValid(playListTogglePanelButton))
-                    playListScrollView.gameObject.SetActive(false);
+                    playListGameObject.SetActive(false);
                 else
-                    playListScrollView.gameObject.SetActive(hasPlayList);
+                    playListGameObject.SetActive(hasPlayList);
             }
             if (Utilities.IsValid(queueListScrollView)) {
                 queueListScrollView.EventPrefix = "_OnQueueList";
-                queueListScrollView.gameObject.SetActive(hasHandler);
+                queueListScrollViewObject.SetActive(hasHandler);
             }
         }
 
@@ -87,8 +87,7 @@ namespace JLChnToZ.VRC.VVMW {
         public
 #endif
         void _PlayListTogglePanel() {
-            if (!Utilities.IsValid(playListScrollView)) return;
-            var playListGameObject = playListScrollView.gameObject;
+            if (!Utilities.IsValid(playListGameObject)) return;
             playListGameObject.SetActive(!playListGameObject.activeSelf);
         }
 
@@ -126,7 +125,7 @@ namespace JLChnToZ.VRC.VVMW {
                 displayCount = queuedUrls.Length;
             }
             bool hasPending = pendingCount > 0;
-            bool isEntryContainerInactive = !Utilities.IsValid(queueListScrollView) || !queueListScrollView.gameObject.activeInHierarchy;
+            bool isEntryContainerInactive = !Utilities.IsValid(queueListScrollViewObject) || !queueListScrollViewObject.activeInHierarchy;
             int selectedPlayListIndex = SelectedPlayListIndex;
             bool isNotCoolingDown = (DateTime.UtcNow - playListLastInteractTime) >= interactCoolDown;
             if (isEntryContainerInactive || isNotCoolingDown)
@@ -188,7 +187,7 @@ namespace JLChnToZ.VRC.VVMW {
         public
 #endif
         void _OnPlayListEntryClick() {
-            if (Utilities.IsValid(currentPlayListButton)) playListScrollView.gameObject.SetActive(false);
+            if (Utilities.IsValid(currentPlayListButton)) playListGameObject.SetActive(false);
             playListLastInteractTime = DateTime.UtcNow;
             UpdatePlayList();
             queueListScrollView.ScrollToSelected();

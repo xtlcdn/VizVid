@@ -480,10 +480,12 @@ MonoBehaviour:
       Entry: 6
       Data: 
   _udonSharpBackingUdonBehaviour: {fileID: 553489505374554968}
+  contentGameObject: {fileID: 553489504254906132}
   content: {fileID: 553489504254906134}
   contentTMPro: {fileID: 0}
   primaryButton: {fileID: 553489504208781197}
   deleteButton: {fileID: 553489504645716348}
+  deleteButtonGO: {fileID: 0}
   selectedColor: {r: 1, g: 1, b: 1, a: 1}
   normalColor: {r: 0.5294118, g: 0.8862746, b: 0.8980393, a: 1}
   callbackTarget: {fileID: 0}

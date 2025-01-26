@@ -161,7 +161,7 @@ namespace JLChnToZ.VRC.VVMW {
                 }
                 for (int i = 0; i < count; i++)
                     transformsAfterEntry[i].SetAsLastSibling();
-                template.gameObject.SetActive(false);
+                template.SetActive(false);
                 EventPrefix = eventPrefix;
                 hasInit = true;
                 if (Utilities.IsValid(entryNames)) UpdateEntryState();

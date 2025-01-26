@@ -37,7 +37,7 @@ namespace JLChnToZ.VRC.VVMW {
             bool isEmpty = string.IsNullOrEmpty(urlInput.textComponent.text);
             if (Utilities.IsValid(otherObjectUnderUrlInput)) otherObjectUnderUrlInput.SetActive(isEmpty);
             if (Utilities.IsValid(videoPlayerSelectPanel)) videoPlayerSelectPanel.SetActive(!isEmpty);
-            if (Utilities.IsValid(altUrlInput)) altUrlInput.gameObject.SetActive(!isEmpty);
+            if (Utilities.IsValid(altUrlInputObject)) altUrlInputObject.SetActive(!isEmpty);
         }
 
 #if COMPILER_UDONSHARP

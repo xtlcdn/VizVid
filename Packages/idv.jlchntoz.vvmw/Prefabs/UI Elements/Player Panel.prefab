@@ -1626,6 +1626,7 @@ MonoBehaviour:
       Entry: 6
       Data: 
   _udonSharpBackingUdonBehaviour: {fileID: 4852418709479977052}
+  buttonGO: {fileID: 979522937075218520}
   buttonText: {fileID: 6186234336533189471}
   buttonTMPro: {fileID: 0}
   callbackTarget: {fileID: 0}

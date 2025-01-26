@@ -31,6 +31,7 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel] string speedParameterName = "Speed";
         [SerializeField, LocalizedLabel] bool useSharedMaterial = true;
         [SerializeField, LocalizedLabel] AudioSource primaryAudioSource;
+        [SerializeField, HideInInspector, Resolve(nameof(primaryAudioSource), NullOnly = false)] GameObject primaryAudioSourceGO;
         [SerializeField, LocalizedLabel] bool useFlickerWorkaround = true;
         [SerializeField] bool isAvPro;
         [SerializeField, LocalizedLabel] Material blitMaterial;
@@ -523,7 +524,7 @@ namespace JLChnToZ.VRC.VVMW {
                     }
                     if (Utilities.IsValid(primaryAudioSource)) {
                         if (!primaryAudioSource.TryGetComponent(out VRCAVProVideoSpeaker speaker))
-                            speaker = primaryAudioSource.gameObject.AddComponent<VRCAVProVideoSpeaker>();
+                            speaker = primaryAudioSourceGO.AddComponent<VRCAVProVideoSpeaker>();
                         using (var speakerSo = new SerializedObject(speaker)) {
                             speakerSo.FindProperty("videoPlayer").objectReferenceValue = videoPlayer;
                             speakerSo.ApplyModifiedPropertiesWithoutUndo();

@@ -40,6 +40,7 @@ namespace JLChnToZ.VRC.VVMW {
         [BindEvent(nameof(VRCUrlInputField.onValueChanged), nameof(_OnURLChanged))]
         [BindEvent(nameof(VRCUrlInputField.onEndEdit), nameof(_OnURLEndEdit))]
         [SerializeField, LocalizedLabel] VRCUrlInputField altUrlInput;
+        [SerializeField, HideInInspector, Resolve(nameof(altUrlInput), NullOnly = false)] GameObject altUrlInputObject;
         [SerializeField, LocalizedLabel] GameObject videoPlayerSelectButtonTemplate;
         [SerializeField, LocalizedLabel] GameObject videoPlayerSelectRoot, videoPlayerSelectPanel;
         [BindEvent(nameof(Button.onClick), nameof(_VideoPlayerSelect))]
@@ -128,9 +129,11 @@ namespace JLChnToZ.VRC.VVMW {
         [LocalizedHeader("HEADEAR:Queue_List_PlayList")]
         [SerializeField, LocalizedLabel] GameObject playListPanelRoot;
         [SerializeField, LocalizedLabel, BindUdonSharpEvent] PooledScrollView playListScrollView;
+        [SerializeField, HideInInspector, Resolve(nameof(playListScrollView), NullOnly = false)] GameObject playListGameObject;
         [BindEvent(nameof(Button.onClick), nameof(_PlayListTogglePanel))]
         [SerializeField, LocalizedLabel] Button playListTogglePanelButton;
         [SerializeField, LocalizedLabel, BindUdonSharpEvent] PooledScrollView queueListScrollView;
+        [SerializeField, HideInInspector, Resolve(nameof(queueListScrollView), NullOnly = false)] GameObject queueListScrollViewObject;
         [SerializeField, LocalizedLabel] GameObject playNextIndicator;
         [SerializeField, LocalizedLabel] GameObject selectedPlayListObject;
         [SerializeField, HideInInspector, Resolve(nameof(selectedPlayListObject), NullOnly = false)] Text selectedPlayListText;

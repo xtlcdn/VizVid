@@ -57,20 +57,21 @@ namespace JLChnToZ.VRC.VVMW {
         [BindEvent(nameof(Slider.onValueChanged), nameof(_OnVolumeSliderChanged))]
         [SerializeField, LocalizedLabel] Slider volumeSliderVR;
         [SerializeField, LocalizedLabel] RectTransform volumeSliderDesktop;
-        [TMProMigratable(nameof(desktopHintsReloadButtonKeyTMPro))]
-        [SerializeField, LocalizedLabel] Text desktopHintsReloadButtonKey;
-        [TMProMigratable(nameof(desktopHintsVolumeUpKeyTMPro))]
-        [SerializeField, LocalizedLabel] Text desktopHintsVolumeUpKey;
-        [TMProMigratable(nameof(desktopHintsVolumeDownKeyTMPro))]
-        [SerializeField, LocalizedLabel] Text desktopHintsVolumeDownKey;
-        [TMProMigratable(nameof(desktopHintsReloadButtonKey2TMPro))]
-        [SerializeField, LocalizedLabel] Text desktopHintsReloadButtonKey2;
-        [TMProMigratable(nameof(desktopHintsVolumeUpKey2TMPro))]
-        [SerializeField, LocalizedLabel] Text desktopHintsVolumeUpKey2;
-        [TMProMigratable(nameof(desktopHintsVolumeDownKey2TMPro))]
-        [SerializeField, LocalizedLabel] Text desktopHintsVolumeDownKey2;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI desktopHintsReloadButtonKeyTMPro, desktopHintsVolumeUpKeyTMPro, desktopHintsVolumeDownKeyTMPro;
-        [SerializeField, LocalizedLabel] TextMeshProUGUI desktopHintsReloadButtonKey2TMPro, desktopHintsVolumeUpKey2TMPro, desktopHintsVolumeDownKey2TMPro;
+        [SerializeField, LocalizedLabel] GameObject
+            desktopHintsReloadButtonKeyGO, desktopHintsVolumeUpKeyGO, desktopHintsVolumeDownKeyGO,
+            desktopHintsReloadButtonKey2GO, desktopHintsVolumeUpKey2GO, desktopHintsVolumeDownKey2GO;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsReloadButtonKeyGO), NullOnly = false)] Text desktopHintsReloadButtonKey;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeUpKeyGO), NullOnly = false)] Text desktopHintsVolumeUpKey;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeDownKeyGO), NullOnly = false)] Text desktopHintsVolumeDownKey;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsReloadButtonKey2GO), NullOnly = false)] Text desktopHintsReloadButtonKey2;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeUpKey2GO), NullOnly = false)] Text desktopHintsVolumeUpKey2;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeDownKey2GO), NullOnly = false)] Text desktopHintsVolumeDownKey2;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsReloadButtonKeyGO), NullOnly = false)] TextMeshProUGUI desktopHintsReloadButtonKeyTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeUpKeyGO), NullOnly = false)] TextMeshProUGUI desktopHintsVolumeUpKeyTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeDownKeyGO), NullOnly = false)] TextMeshProUGUI desktopHintsVolumeDownKeyTMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsReloadButtonKey2GO), NullOnly = false)] TextMeshProUGUI desktopHintsReloadButtonKey2TMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeUpKey2GO), NullOnly = false)] TextMeshProUGUI desktopHintsVolumeUpKey2TMPro;
+        [SerializeField, HideInInspector, Resolve(nameof(desktopHintsVolumeDownKey2GO), NullOnly = false)] TextMeshProUGUI desktopHintsVolumeDownKey2TMPro;
         Animator desktopModeAnim;
         bool vrMode, afterFirstRun;
         VRCPlayerApi localPlayer;

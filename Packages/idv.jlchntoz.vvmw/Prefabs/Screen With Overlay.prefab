@@ -4304,6 +4304,7 @@ GameObject:
   - component: {fileID: 7315061199001338454}
   - component: {fileID: 7315061199001338448}
   - component: {fileID: 7315061199001338449}
+  - component: {fileID: 7455575687349792227}
   - component: {fileID: 5767931935927454803}
   m_Layer: 0
   m_Name: Screen With Overlay
@@ -4356,6 +4357,7 @@ MonoBehaviour:
   languageManager: {fileID: 0}
   urlInput: {fileID: 8796834308148168190}
   altUrlInput: {fileID: 0}
+  altUrlInputObject: {fileID: 0}
   videoPlayerSelectButtonTemplate: {fileID: 5215436447127306290}
   videoPlayerSelectRoot: {fileID: 3322961673784676763}
   videoPlayerSelectPanel: {fileID: 1131719348066348434}
@@ -4419,8 +4421,10 @@ MonoBehaviour:
   idleScreenRoot: {fileID: 6898517154084395741}
   playListPanelRoot: {fileID: 6751938479174443565}
   playListScrollView: {fileID: 8637889106835254093}
+  playListGameObject: {fileID: 0}
   playListTogglePanelButton: {fileID: 4945338202527484620}
   queueListScrollView: {fileID: 4136825756390268076}
+  queueListScrollViewObject: {fileID: 0}
   playNextIndicator: {fileID: 0}
   selectedPlayListObject: {fileID: 5651099101458423496}
   selectedPlayListText: {fileID: 573662285814026412}
@@ -4483,6 +4487,25 @@ MonoBehaviour:
   serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
   publicVariablesUnityEngineObjects: []
   publicVariablesSerializationDataFormat: 0
+--- !u!114 &7455575687349792227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7315061199001338455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f48bad1c2feb74a4f9ce69b7031605f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  core: {fileID: 0}
+  screenRenderer: {fileID: 33428063300932046}
+  targetMode: 1
+  targetIndex: -1
+  targetPropertyName: _MainTex
+  avProPropertyName: _IsAVProVideo
+  defaultTexture: {fileID: 0}
 --- !u!114 &5767931935927454803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8069,6 +8092,12 @@ PrefabInstance:
 --- !u!4 &33428063300932045 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4683018103515994381, guid: f60502194084532469b1d802d74b55d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4651002914471381184}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &33428063300932046 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4683018103515994382, guid: f60502194084532469b1d802d74b55d2,
     type: 3}
   m_PrefabInstance: {fileID: 4651002914471381184}
   m_PrefabAsset: {fileID: 0}

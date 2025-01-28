@@ -578,4 +578,15 @@ namespace JLChnToZ.VRC.VVMW {
 #endif
         #endregion
     }
+
+#if !COMPILER_UDONSHARP
+    public partial class UIHandler : IVizVidCompoonent {
+        Core IVizVidCompoonent.Core {
+            get {
+                if (handler) return handler.core;
+                return core;
+            }
+        }
+    }
+#endif
 }

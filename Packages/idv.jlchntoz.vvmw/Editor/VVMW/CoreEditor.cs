@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -19,8 +18,6 @@ using UnityObject = UnityEngine.Object;
 namespace JLChnToZ.VRC.VVMW.Editors {
     [CustomEditor(typeof(Core))]
     public class CoreEditor : VVMWEditorBase {
-        static readonly Dictionary<Type, (FieldInfo fieldInfo, Type editorType)> controllableTypes = new Dictionary<Type, (FieldInfo, Type)>();
-        static readonly Dictionary<Type, Type> editorTypes = new Dictionary<Type, Type>();
         readonly Dictionary<Core, UdonSharpBehaviour> autoPlayControllers = new Dictionary<Core, UdonSharpBehaviour>();
         static readonly string[] materialModeOptions = new string[3];
         static string[] playerNames;
@@ -57,11 +54,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         List<bool> screenTargetVisibilityState;
         Editor autoPlayControllerEditor;
         Editor[] playerHandlerEditors;
-
-        static CoreEditor() {
-            AssemblyReloadEvents.afterAssemblyReload += GatherControlledTypes;
-            GatherControlledTypes();
-        }
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -378,14 +370,10 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                     }
                 }
                 EditorGUIUtility.labelWidth += 16;
-                materialModeOptions[0] = i18n.GetOrDefault("VVMW.Material.PropertyBlock");
-                materialModeOptions[1] = i18n.GetOrDefault("VVMW.Material.SharedMaterial");
-                materialModeOptions[2] = i18n.GetOrDefault("VVMW.Material.ClonedMaterial");
                 if (i >= 0 && screenTargetVisibilityState[i])
                     using (new EditorGUI.IndentLevelScope())
                     using (new EditorGUILayout.VerticalScope(GUI.skin.box)) {
-                        int mode = modeProperty.intValue & 0x7;
-                        bool useST = (modeProperty.intValue & 0x8) != 0;
+                        ParseScreenMode(modeProperty, out int mode, out bool useST);
                         bool showMaterialOptions = false;
                         Shader selectedShader = null;
                         Material[] materials = null;
@@ -394,21 +382,10 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                             showMaterialOptions = true;
                             selectedShader = m.shader;
                         } else if (targetProperty.objectReferenceValue is Renderer renderer) {
-                            var indexProperty = screenTargetIndecesProperty.GetArrayElementAtIndex(i);
-                            if (mode != 1 && mode != 2 && mode != 3) mode = 1;
-                            mode = EditorGUILayout.Popup(i18n.GetLocalizedContent("VVMW.Mode"), mode - 1, materialModeOptions) + 1;
-                            materials = renderer.sharedMaterials;
-                            string[] indexNames = new string[materials.Length + 1];
-                            indexNames[0] = i18n.GetOrDefault("VVMW.All");
-                            for (int j = 0; j < materials.Length; j++)
-                                if (materials[j] != null)
-                                    indexNames[j + 1] = $"({j}) {materials[j].name} ({materials[j].shader.name.Replace("/", ".")})";
-                                else
-                                    indexNames[j + 1] = $"({j}) null";
-                            int selectedIndex = indexProperty.intValue + 1;
-                            selectedIndex = EditorGUILayout.Popup(i18n.GetLocalizedContent("VVMW.Material"), selectedIndex, indexNames) - 1;
-                            indexProperty.intValue = selectedIndex;
-                            selectedShader = selectedIndex >= 0 && selectedIndex <= materials.Length ? materials[selectedIndex].shader : null;
+                            DrawScreenRendererOptions(
+                                screenTargetIndecesProperty.GetArrayElementAtIndex(i),
+                                renderer, ref mode, out selectedShader, out materials
+                            );
                             showMaterialOptions = true;
                         } else if (targetProperty.objectReferenceValue is RawImage) {
                             mode = 4;
@@ -424,32 +401,17 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                             length--;
                             continue;
                         }
-                        if (showMaterialOptions) {
-                            var nameProperty = screenTargetPropertyNamesProperty.GetArrayElementAtIndex(i);
-                            var avProProperty = avProPropertyNamesProperty.GetArrayElementAtIndex(i);
-                            Utils.DrawShaderPropertiesField(
-                                nameProperty, i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.screenTargetPropertyNames"),
-                                selectedShader, materials, ShaderUtil.ShaderPropertyType.TexEnv
+                        if (showMaterialOptions)
+                            DrawScreenMaterialOptions(
+                                screenTargetPropertyNamesProperty.GetArrayElementAtIndex(i),
+                                avProPropertyNamesProperty.GetArrayElementAtIndex(i),
+                                ref useST, selectedShader, materials
                             );
-                            using (var changed = new EditorGUI.ChangeCheckScope()) {
-                                useST = EditorGUILayout.Toggle(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.useST"), useST);
-                                if (!useST) Utils.DrawShaderPropertiesField(
-                                    avProProperty, i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.avProPropertyNames"),
-                                    selectedShader, materials, ShaderUtil.ShaderPropertyType.Float
-                                );
-                            }
-                        }
-                        var textureProperty = screenTargetDefaultTexturesProperty.GetArrayElementAtIndex(i);
-                        var rect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight);
-                        var label = i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.screenTargetDefaultTextures");
-                        using (new EditorGUI.PropertyScope(rect, label, textureProperty))
-                        using (var changed = new EditorGUI.ChangeCheckScope()) {
-                            var texture = textureProperty.objectReferenceValue;
-                            if (texture == null) texture = defaultTextureProperty.objectReferenceValue;
-                            texture = EditorGUI.ObjectField(rect, label, texture, typeof(Texture), false);
-                            if (changed.changed) textureProperty.objectReferenceValue = texture;
-                        }
-                        modeProperty.intValue = mode | (useST ? 0x8 : 0);
+                        DrawScreenTextureOptions(
+                            screenTargetDefaultTexturesProperty.GetArrayElementAtIndex(i),
+                            defaultTextureProperty
+                        );
+                        SetScreenMode(modeProperty, mode, useST);
                     }
             }
             using (var changed = new EditorGUI.ChangeCheckScope()) {
@@ -467,6 +429,78 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                 }
             }
             EditorGUILayout.Space();
+        }
+
+        public static void ParseScreenMode(SerializedProperty modeProperty, out int mode, out bool useST) {
+            int rawMode = modeProperty.intValue;
+            mode = rawMode & 0x7;
+            useST = (rawMode & 0x8) != 0;
+        }
+
+        public static void SetScreenMode(SerializedProperty modeProperty, int mode, bool useST) {
+            modeProperty.intValue = mode | (useST ? 0x8 : 0);
+        }
+
+        public static void DrawScreenRendererOptions(
+            SerializedProperty indexProperty,
+            Renderer renderer,
+            ref int mode,
+            out Shader selectedShader,
+            out Material[] materials
+        ) {
+            if (mode != 1 && mode != 2 && mode != 3) mode = 1;
+            materialModeOptions[0] = i18n.GetOrDefault("VVMW.Material.PropertyBlock");
+            materialModeOptions[1] = i18n.GetOrDefault("VVMW.Material.SharedMaterial");
+            materialModeOptions[2] = i18n.GetOrDefault("VVMW.Material.ClonedMaterial");
+            mode = EditorGUILayout.Popup(i18n.GetLocalizedContent("VVMW.Mode"), mode - 1, materialModeOptions) + 1;
+            materials = renderer.sharedMaterials;
+            string[] indexNames = new string[materials.Length + 1];
+            indexNames[0] = i18n.GetOrDefault("VVMW.All");
+            for (int j = 0; j < materials.Length; j++)
+                if (materials[j] != null)
+                    indexNames[j + 1] = $"({j}) {materials[j].name} ({materials[j].shader.name.Replace("/", ".")})";
+                else
+                    indexNames[j + 1] = $"({j}) null";
+            int selectedIndex = indexProperty.intValue + 1;
+            selectedIndex = EditorGUILayout.Popup(i18n.GetLocalizedContent("VVMW.Material"), selectedIndex, indexNames) - 1;
+            indexProperty.intValue = selectedIndex;
+            selectedShader = selectedIndex >= 0 && selectedIndex <= materials.Length ? materials[selectedIndex].shader : null;
+        }
+
+        public static void DrawScreenMaterialOptions(
+            SerializedProperty nameProperty,
+            SerializedProperty avProProperty,
+            ref bool useST,
+            Shader selectedShader,
+            Material[] materials
+        ) {
+            Utils.DrawShaderPropertiesField(
+                nameProperty, i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.screenTargetPropertyNames"),
+                selectedShader, materials, ShaderUtil.ShaderPropertyType.TexEnv
+            );
+            using (var changed = new EditorGUI.ChangeCheckScope()) {
+                useST = EditorGUILayout.Toggle(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.useST"), useST);
+                if (!useST) Utils.DrawShaderPropertiesField(
+                    avProProperty, i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.avProPropertyNames"),
+                    selectedShader, materials, ShaderUtil.ShaderPropertyType.Float
+                );
+            }
+        }
+
+        public static void DrawScreenTextureOptions(
+            SerializedProperty textureProperty,
+            SerializedProperty defaultTextureProperty = null
+        ) {
+            var rect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight);
+            var label = i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.screenTargetDefaultTextures");
+            using (new EditorGUI.PropertyScope(rect, label, textureProperty))
+            using (var changed = new EditorGUI.ChangeCheckScope()) {
+                var texture = textureProperty.objectReferenceValue;
+                if (texture == null && defaultTextureProperty != null)
+                    texture = defaultTextureProperty.objectReferenceValue;
+                texture = EditorGUI.ObjectField(rect, label, texture, typeof(Texture), false);
+                if (changed.changed) textureProperty.objectReferenceValue = texture;
+            }
         }
 
         public static bool AddTarget(Core core, UnityObject newTarget, bool recordUndo = true, bool copyToUdon = false) {
@@ -606,75 +640,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             int size = property.arraySize;
             property.arraySize++;
             property.GetArrayElementAtIndex(size).intValue = value;
-        }
-
-        static void GatherControlledTypes() {
-            controllableTypes.Clear();
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            var inheritedEditors = new Dictionary<Type, Type>();
-            var processedTypes = new HashSet<Type>();
-            var inspectedTypeField = typeof(CustomEditor).GetField("m_InspectedType", flags);
-            var editorForChildClassesField = typeof(CustomEditor).GetField("m_EditorForChildClasses", flags);
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-                foreach (var type in assembly.GetTypes()) {
-                    if (type.IsAbstract) continue;
-                    if (type.IsSubclassOf(typeof(UdonSharpBehaviour))) {
-                        if (processedTypes.Add(type) && !editorTypes.ContainsKey(type)) {
-                            Type targetType = null;
-                            int score = 0;
-                            foreach (var inheritedEditor in inheritedEditors) {
-                                int currentScore = 0;
-                                for (var bt = type; bt != null; bt = bt.BaseType) {
-                                    if (bt == inheritedEditor.Key) {
-                                        if (currentScore > score) {
-                                            score = currentScore;
-                                            targetType = inheritedEditor.Value;
-                                        }
-                                        break;
-                                    }
-                                    currentScore--;
-                                }
-                            }
-                            if (targetType != null) editorTypes[type] = targetType;
-                        }
-                        var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                        if (fields.Length == 0) continue;
-                        foreach (var field in fields) {
-                            if (field.FieldType == typeof(Core) && field.GetCustomAttribute<SingletonCoreControlAttribute>() != null) {
-                                editorTypes.TryGetValue(type, out var editorType);
-                                controllableTypes[type] = (field, editorType);
-                                break;
-                            }
-                        }
-                    } else if (type.IsSubclassOf(typeof(VVMWEditorBase))) {
-                        var customEditorAttribute = type.GetCustomAttribute<CustomEditor>();
-                        if (customEditorAttribute == null) continue;
-                        var inspectedType = inspectedTypeField.GetValue(customEditorAttribute) as Type;
-                        if (controllableTypes.TryGetValue(inspectedType, out var value))
-                            controllableTypes[inspectedType] = (value.fieldInfo, type);
-                        editorTypes[inspectedType] = type;
-                        if ((bool)editorForChildClassesField.GetValue(customEditorAttribute)) {
-                            inheritedEditors[inspectedType] = type;
-                            foreach (var pType in processedTypes) {
-                                int baseScore = 0, currentScore = 0;
-                                if (editorTypes.TryGetValue(pType, out var editorType)) {
-                                    for (var bt = pType; bt != null; bt = bt.BaseType) {
-                                        if (bt == editorType) break;
-                                        baseScore--;
-                                    }
-                                } else
-                                    baseScore = int.MinValue;
-                                for (var bt = pType; bt != null; bt = bt.BaseType) {
-                                    if (bt == inspectedType) {
-                                        if (currentScore > baseScore) editorTypes[pType] = type;
-                                        break;
-                                    }
-                                    currentScore--;
-                                }
-                            }
-                        }
-                    }
-                }
         }
 
         void GetControlledTypesOnScene() {

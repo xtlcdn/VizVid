@@ -17,7 +17,7 @@ namespace JLChnToZ.VRC.VVMW {
     [DefaultExecutionOrder(2)]
     [AddComponentMenu("VizVid/Stream Key Assigner")]
     [HelpURL("https://xtlcdn.github.io/VizVid/docs/#how-to-automatically-assigns-unique-stream-links-for-each-event-performer-or-instance")]
-    public class StreamLinkAssigner : VizVidBehaviour {
+    public partial class StreamLinkAssigner : VizVidBehaviour {
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core"), Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before
@@ -111,4 +111,10 @@ namespace JLChnToZ.VRC.VVMW {
             if (core) core.PlayUrl(streamLinks[streamIndex], altStreamLinks[streamIndex], (byte)playerIndex);
         }
     }
+
+#if !COMPILER_UDONSHARP
+    public partial class StreamLinkAssigner : IVizVidCompoonent {
+        Core IVizVidCompoonent.Core => core;
+    }
+#endif
 }

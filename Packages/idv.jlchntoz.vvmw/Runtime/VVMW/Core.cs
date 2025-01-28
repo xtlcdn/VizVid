@@ -720,4 +720,10 @@ namespace JLChnToZ.VRC.VVMW {
         }
 #endif
     }
+
+#if !COMPILER_UDONSHARP
+    public partial class Core : IVizVidCompoonent {
+        Core IVizVidCompoonent.Core => this;
+    }
+#endif
 }

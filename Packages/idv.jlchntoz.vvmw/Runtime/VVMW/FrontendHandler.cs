@@ -480,4 +480,10 @@ namespace JLChnToZ.VRC.VVMW {
 
         bool IsArrayNullOrEmpty(Array array) => !Utilities.IsValid(array) || array.Length == 0;
     }
+
+#if !COMPILER_UDONSHARP
+    public partial class FrontendHandler : IVizVidCompoonent {
+        Core IVizVidCompoonent.Core => core;
+    }
+#endif
 }

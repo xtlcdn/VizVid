@@ -184,8 +184,10 @@ namespace JLChnToZ.VRC.VVMW {
     }
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
-    public abstract partial class AbstractMediaPlayerHandler : ISelfPreProcess {
+    public abstract partial class AbstractMediaPlayerHandler : ISelfPreProcess, IVizVidCompoonent {
         internal static ApplyTurstedUrl applyTurstedUrl; // Actual method is in TrustedUrlUtls
+
+        Core IVizVidCompoonent.Core => core;
 
         int IPrioritizedPreProcessor.Priority => -10;
 

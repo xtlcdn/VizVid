@@ -17,8 +17,6 @@ namespace JLChnToZ.VRC.VVMW.Designer {
             colorsProperty = serializedObject.FindProperty("colors");
         }
 
-        public override void OnInspectorGUI() => DrawInspectorGUI();
-
         public override void DrawEmbeddedInspectorGUI() {
             EditorGUILayout.LabelField(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Designer.ColorConfig.colorPalette"), EditorStyles.boldLabel);
             for (int i = 0; i < colorsProperty.arraySize; i++) {

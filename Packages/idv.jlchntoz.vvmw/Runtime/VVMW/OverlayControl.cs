@@ -19,7 +19,7 @@ namespace JLChnToZ.VRC.VVMW {
     [AddComponentMenu("VizVid/Components/Overlay Control")]
     [DefaultExecutionOrder(2)]
     [HelpURL("https://xtlcdn.github.io/VizVid/docs/#how-to-add-an-overlay-control")]
-    public class OverlayControl : VizVidBehaviour {
+    public partial class OverlayControl : VizVidBehaviour {
 
 #if VRC_ENABLE_PLAYER_PERSISTENCE
         const string PlayerPersistenceHandKey = "VVMW:OverlayControl:Hand";
@@ -240,4 +240,10 @@ namespace JLChnToZ.VRC.VVMW {
 #endif
         }
     }
+
+#if !COMPILER_UDONSHARP
+    public partial class OverlayControl : IVizVidCompoonent {
+        Core IVizVidCompoonent.Core => core;
+    }
+#endif
 }

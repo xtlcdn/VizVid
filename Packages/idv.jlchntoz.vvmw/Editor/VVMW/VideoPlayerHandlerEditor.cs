@@ -36,7 +36,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         }
 
         public override void DrawInspectorGUI() {
-            if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
             if (PrefabUtility.IsPartOfPrefabAsset(this.target)) {
                 EditorGUILayout.HelpBox(i18n.GetOrDefault("JLChnToZ.VRC.VVMW.VideoPlayerHandler:no_prefab"), MessageType.Info);
                 DrawDefaultInspector();

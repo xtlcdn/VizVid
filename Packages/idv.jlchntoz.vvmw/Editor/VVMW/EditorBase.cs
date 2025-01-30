@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 using UdonSharp;
+using UdonSharpEditor;
 using JLChnToZ.VRC.Foundation.I18N;
 using JLChnToZ.VRC.Foundation.Editors;
 using JLChnToZ.VRC.Foundation.I18N.Editors;
@@ -24,6 +25,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
         static Font font;
         static GUIStyle versionLabelStyle;
         protected static EditorI18N i18n;
+        bool isUdonSharp;
 
         [InitializeOnLoadMethod]
         static void Init() {
@@ -130,6 +132,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             selfUpdater.OnVersionRefreshed += Repaint;
 #endif
             i18n = EditorI18N.Instance;
+            isUdonSharp = target is UdonSharpBehaviour;
         }
 
         protected virtual void OnDisable() {
@@ -156,13 +159,20 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                     if (b == target) DrawBanner();
                     break;
                 }
+            if (isUdonSharp) {
+                using (new EditorGUILayout.VerticalScope(GUI.skin.box)) 
+                using (new EditorGUI.IndentLevelScope()) {
+                    if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, true, false))
+                        return;
+                }
+                EditorGUILayout.Space();
+            }
             DrawInspectorGUI();
         }
 
         protected static void DrawBanner() {
             if (bannerTexture != null) {
-                var rect = GUILayoutUtility.GetRect(0, 0);
-                rect.height = 120;
+                var rect = GUILayoutUtility.GetRect(0, 120);
                 GUILayout.Space(rect.height);
                 var bannerRect = new Rect(
                     rect.x + (rect.width - bannerTexture.width * rect.height / bannerTexture.height) / 2,

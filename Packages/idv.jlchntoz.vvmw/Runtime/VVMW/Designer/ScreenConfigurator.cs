@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using JLChnToZ.VRC.Foundation;
 using JLChnToZ.VRC.Foundation.I18N;
@@ -13,6 +14,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
     [EditorOnly]
     [AddComponentMenu("VizVid/Components/Screen Configurator")]
     public class ScreenConfigurator : MonoBehaviour, IVizVidCompoonent {
+        static readonly Dictionary<(Renderer, int), ScreenConfigurator> instances = new Dictionary<(Renderer, int), ScreenConfigurator>();
         [SerializeField, Locatable, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")] internal Core core;
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core.videoScreenTarget")] internal Renderer screenRenderer;
         [SerializeField] int targetMode = 1;
@@ -22,6 +24,8 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core.screenTargetDefaultTextures")] Texture defaultTexture;
         Renderer previousRenderer;
         Core previousCore;
+        int lastIndex;
+        [NonSerialized] bool firstRun;
 
         Core IVizVidCompoonent.Core => core;
 
@@ -69,15 +73,23 @@ namespace JLChnToZ.VRC.VVMW.Designer {
             RemoveIndexFromArray(ref core.screenTargetDefaultTextures, index);
         }
 
+        public static ScreenConfigurator GetInstance(Renderer renderer, int index = -1) {
+            if (renderer && instances.TryGetValue((renderer, index), out var instance))
+                return instance;
+            return null;
+        }
+
         void Awake() {
             if (Application.isPlaying || IsPrefabEditingMode) return;
+            if (firstRun) return;
+            firstRun = true;
             previousRenderer = screenRenderer;
-            if (core) {
-                previousCore = core;
-                return;
-            }
+            if (core) previousCore = core;
             var renderer = Renderer;
             if (!renderer) return;
+            lastIndex = targetIndex;
+            instances[(renderer, targetIndex)] = this;
+            if (core) return;
             var cores = FindObjectsOfType<Core>(true);
             foreach (var c in cores) {
                 if (c.screenTargets == null || Array.IndexOf(c.screenTargets, renderer) < 0) continue;
@@ -98,6 +110,13 @@ namespace JLChnToZ.VRC.VVMW.Designer {
         }
 
         void OnValidate() {
+            Awake();
+            if (screenRenderer && lastIndex != targetIndex) {
+                if (instances.TryGetValue((screenRenderer, lastIndex), out var instance) && instance == this)
+                    instances.Remove((screenRenderer, lastIndex));
+                lastIndex = targetIndex;
+                instances[(screenRenderer, targetIndex)] = this;
+            }
             if (Application.isPlaying || IsPrefabEditingMode) return;
 #if UNITY_EDITOR
             if (PrefabUtility.IsPartOfPrefabAsset(this)) return;
@@ -112,15 +131,16 @@ namespace JLChnToZ.VRC.VVMW.Designer {
             if (!renderer) return;
             try {
                 if (renderer != screenRenderer) {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
                     Undo.RecordObject(this, "Screen Configurator");
-    #endif
+#endif
                     screenRenderer = renderer;
                 }
                 if (AddToCoreIfEmpty(renderer)) {
                     previousRenderer = renderer;
                     return;
                 }
+                if (!previousRenderer) previousRenderer = renderer;
                 index = Array.IndexOf(core.screenTargets, previousRenderer);
                 if (index < 0) {
                     AppendToCore(renderer);
@@ -149,7 +169,12 @@ namespace JLChnToZ.VRC.VVMW.Designer {
                     core.screenTargets[index] = renderer;
                 }
             } finally {
-                previousRenderer = renderer;
+                if (previousRenderer != renderer || lastIndex != targetIndex) {
+                    if (instances.TryGetValue((previousRenderer, lastIndex), out var instance) && instance == this)
+                        instances.Remove((previousRenderer, lastIndex));
+                    if (renderer) instances[(renderer, targetIndex)] = this;
+                    previousRenderer = renderer;
+                }
 #if UNITY_EDITOR
                 Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
 #endif

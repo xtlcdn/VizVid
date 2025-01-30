@@ -96,13 +96,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             coreSO = null;
         }
 
-        public override void DrawInspectorGUI() {
-            if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
-            serializedObject.Update();
-            DrawEmbeddedInspectorGUI();
-            serializedObject.ApplyModifiedProperties();
-        }
-
         public override void DrawEmbeddedInspectorGUI() {
             DrawNecessaryFields();
             EditorGUILayout.Space();

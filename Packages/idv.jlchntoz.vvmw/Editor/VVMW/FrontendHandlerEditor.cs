@@ -57,7 +57,6 @@ namespace JLChnToZ.VRC.VVMW.Editors {
 
 
         public override void DrawInspectorGUI() {
-            if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target, false, false)) return;
             serializedObject.Update();
             EditorGUILayout.PropertyField(coreProperty);
             if (coreProperty.objectReferenceValue == null) EditorGUILayout.HelpBox(i18n.GetOrDefault("JLChnToZ.VRC.VVMW.Core:empty_message"), MessageType.Error);

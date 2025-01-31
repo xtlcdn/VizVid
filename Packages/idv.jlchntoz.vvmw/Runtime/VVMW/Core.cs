@@ -718,16 +718,16 @@ namespace JLChnToZ.VRC.VVMW {
     public partial class Core : IVizVidCompoonent {
         Core IVizVidCompoonent.Core => this;
 
+#if UNITY_EDITOR
         void OnDrawGizmosSelected() {
             DrawScreenGizmos();
             DrawAudioGizmos();
         }
 
         void OnValidate() {
-#if UNITY_EDITOR
             ValidateScreen();
-#endif
         }
+#endif
     }
 #endif
 }

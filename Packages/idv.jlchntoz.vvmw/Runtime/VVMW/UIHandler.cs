@@ -21,11 +21,12 @@ namespace JLChnToZ.VRC.VVMW {
     [HelpURL("https://xtlcdn.github.io/VizVid/docs/#default-ui--screen-with-overlay")]
     public partial class UIHandler : VizVidBehaviour {
         [LocalizedHeader("HEADER:Main_Reference")]
-        [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core"), Locatable(
+        [SerializeField, BindUdonSharpEvent, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")]
+        [Resolve(nameof(handler), HideInInspectorIfResolvable = true), Resolve("core")]
+        [Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before
-        ), BindUdonSharpEvent]
-        Core core;
+        )] Core core;
         [Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before
@@ -209,7 +210,6 @@ namespace JLChnToZ.VRC.VVMW {
             if (afterFirstRun) return;
             afterFirstRun = true;
             joinTime = DateTime.UtcNow;
-            if (Utilities.IsValid(handler)) core = handler.core;
             if (Utilities.IsValid(luminanceSlider) && !string.IsNullOrEmpty(luminancePropertyName)) {
                 luminancePropertyId = VRCShader.PropertyToID(luminancePropertyName);
                 _OnScreenSharedPropertiesChanged();

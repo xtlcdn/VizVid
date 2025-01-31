@@ -14,6 +14,7 @@ namespace JLChnToZ.VRC.VVMW.Designer {
     [EditorOnly]
     [AddComponentMenu("VizVid/Components/Screen Configurator")]
     public class ScreenConfigurator : MonoBehaviour, IVizVidCompoonent {
+        static readonly List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();
         static readonly Dictionary<(Renderer, int), ScreenConfigurator> instances = new Dictionary<(Renderer, int), ScreenConfigurator>();
         [SerializeField, Locatable, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")] internal Core core;
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core.videoScreenTarget")] internal Renderer screenRenderer;
@@ -121,6 +122,12 @@ namespace JLChnToZ.VRC.VVMW.Designer {
 #if UNITY_EDITOR
             if (PrefabUtility.IsPartOfPrefabAsset(this)) return;
 #endif
+            GetComponents(monoBehaviours);
+            foreach (var mb in monoBehaviours)
+                if (mb is IVizVidCompoonent compoonent) {
+                    core = compoonent.Core;
+                    break;
+                }
             int index;
             if (previousCore != core) {
                 RemoveFromCore(previousCore, previousRenderer);

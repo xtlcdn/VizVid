@@ -6,6 +6,10 @@ using JLChnToZ.VRC.Foundation.I18N;
 
 namespace JLChnToZ.VRC.VVMW {
     public partial class Core {
+#if !COMPILER_UDONSHARP
+        static System.Collections.Generic.HashSet<(Object, int, int, string, string, Texture)> screenOptions =
+            new System.Collections.Generic.HashSet<(Object, int, int, string, string, Texture)>();
+#endif
         Vector4 normalST = new Vector4(1, 1, 0, 0), flippedST = new Vector4(1, -1, 0, 1);
         Rect normalRect = new Rect(0, 0, 1, 1), flippedRect = new Rect(0, 1, 1, -1);
         [SerializeField, LocalizedLabel] Texture defaultTexture;
@@ -259,7 +263,7 @@ namespace JLChnToZ.VRC.VVMW {
             }
         }
 
-#if !COMPILER_UDONSHARP
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
         void DrawScreenGizmos() {
             for (int i = 0; i < screenTargets.Length; i++) {
                 Gizmos.color = Color.HSVToRGB(i * 0.35F % 1F, 1F, 1F);
@@ -280,6 +284,36 @@ namespace JLChnToZ.VRC.VVMW {
                     continue;
                 }
             }
+        }
+
+        void ValidateScreen() {
+            screenOptions.Clear();
+            for (int i = screenTargets.Length - 1; i >= 0; i--)
+                if (!screenTargets[i] || UnityEditor.PrefabUtility.IsPartOfPrefabAsset(screenTargets[i]) ||
+                    !screenOptions.Add((
+                    screenTargets[i],
+                    screenTargetModes[i],
+                    screenTargetIndeces[i],
+                    screenTargetPropertyNames[i],
+                    avProPropertyNames[i],
+                    screenTargetDefaultTextures[i]
+                ))) {
+                    RemoveElement(ref screenTargets, i);
+                    RemoveElement(ref screenTargetModes, i);
+                    RemoveElement(ref screenTargetIndeces, i);
+                    RemoveElement(ref screenTargetPropertyNames, i);
+                    RemoveElement(ref avProPropertyNames, i);
+                    RemoveElement(ref screenTargetDefaultTextures, i);
+                }
+            screenOptions.Clear();
+        }
+
+        static void RemoveElement<T>(ref T[] array, int index) {
+            if (index < 0 || index >= array.Length) return;
+            var newArray = new T[array.Length - 1];
+            System.Array.Copy(array, 0, newArray, 0, index);
+            if (index < array.Length - 1) System.Array.Copy(array, index + 1, newArray, index, array.Length - index - 1);
+            array = newArray;
         }
 #endif
     }

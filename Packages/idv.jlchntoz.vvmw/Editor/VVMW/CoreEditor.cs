@@ -20,6 +20,7 @@ namespace JLChnToZ.VRC.VVMW.Editors {
     [CustomEditor(typeof(Core))]
     public class CoreEditor : VVMWEditorBase {
         readonly Dictionary<Core, UdonSharpBehaviour> autoPlayControllers = new Dictionary<Core, UdonSharpBehaviour>();
+        readonly List<MonoBehaviour> behaviours = new List<MonoBehaviour>();
         static readonly string[] materialModeOptions = new string[3];
         static string[] playerNames;
         static PlayerType[] playerTypes;
@@ -341,8 +342,29 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                         targetProperty.objectReferenceValue as Renderer,
                         screenTargetIndecesProperty.GetArrayElementAtIndex(i).intValue
                     );
-                    using (new EditorGUI.DisabledScope(screenConfigurator && screenConfigurator.core == target)) {
-                        EditorGUILayout.PropertyField(targetProperty, i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.videoScreenTarget", i + 1));
+                    var label = i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.videoScreenTarget", i + 1);
+                    bool deleteElement = false;
+                    if (screenConfigurator && screenConfigurator.core == target) {
+                        using (new EditorGUI.DisabledScope(true))
+                            EditorGUILayout.ObjectField(label, screenConfigurator, typeof(ScreenConfigurator), true);
+                        screenConfigurator.GetComponents(behaviours);
+                        bool locked = false;
+                        foreach (var mb in behaviours)
+                            if (mb is IVizVidCompoonent && mb != screenConfigurator) {
+                                locked = true;
+                                break;
+                            }
+                        using (new EditorGUI.DisabledScope(locked))
+                            if (GUILayout.Button(i18n.GetLocalizedContent("VVMW.Remove"), GUILayout.ExpandWidth(false))) {
+                                using (var scso = new SerializedObject(screenConfigurator)) {
+                                    scso.FindProperty("core").objectReferenceValue = null;
+                                    scso.ApplyModifiedProperties();
+                                }
+                                serializedObject.Update();
+                                deleteElement = true;
+                            }
+                    } else {
+                        EditorGUILayout.PropertyField(targetProperty, label);
                         var value = targetProperty.objectReferenceValue;
                         if (value is GameObject gameObject) {
                             if (gameObject.TryGetComponent(out Renderer renderer))
@@ -356,17 +378,19 @@ namespace JLChnToZ.VRC.VVMW.Editors {
                         else if (value is Material) { }
                         else if (value is RawImage) { }
                         else targetProperty.objectReferenceValue = null;
-                        if (GUILayout.Button(i18n.GetLocalizedContent("VVMW.Remove"), GUILayout.ExpandWidth(false))) {
-                            FUtils.DeleteElement(screenTargetsProperty, i);
-                            FUtils.DeleteElement(screenTargetModesProperty, i);
-                            FUtils.DeleteElement(screenTargetIndecesProperty, i);
-                            FUtils.DeleteElement(screenTargetPropertyNamesProperty, i);
-                            FUtils.DeleteElement(avProPropertyNamesProperty, i);
-                            FUtils.DeleteElement(screenTargetDefaultTexturesProperty, i);
-                            screenTargetVisibilityState.RemoveAt(i);
-                            i--;
-                            length--;
-                        }
+                        if (GUILayout.Button(i18n.GetLocalizedContent("VVMW.Remove"), GUILayout.ExpandWidth(false)))
+                            deleteElement = true;
+                    }
+                    if (deleteElement) {
+                        FUtils.DeleteElement(screenTargetsProperty, i);
+                        FUtils.DeleteElement(screenTargetModesProperty, i);
+                        FUtils.DeleteElement(screenTargetIndecesProperty, i);
+                        FUtils.DeleteElement(screenTargetPropertyNamesProperty, i);
+                        FUtils.DeleteElement(avProPropertyNamesProperty, i);
+                        FUtils.DeleteElement(screenTargetDefaultTexturesProperty, i);
+                        screenTargetVisibilityState.RemoveAt(i);
+                        i--;
+                        length--;
                     }
                 }
                 EditorGUIUtility.labelWidth += 16;
@@ -417,7 +441,13 @@ namespace JLChnToZ.VRC.VVMW.Editors {
             using (var changed = new EditorGUI.ChangeCheckScope()) {
                 var newTarget = EditorGUILayout.ObjectField(i18n.GetLocalizedContent("JLChnToZ.VRC.VVMW.Core.videoScreenTarget:add"), null, typeof(UnityObject), true);
                 if (changed.changed && newTarget != null) {
-                    if (AppendScreen(
+                    if (newTarget is ScreenConfigurator sc){
+                        using (var scso = new SerializedObject(sc)) {
+                            scso.FindProperty("core").objectReferenceValue = target;
+                            scso.ApplyModifiedProperties();
+                        }
+                        serializedObject.Update();
+                    } else if (AppendScreen(
                         newTarget, new ScreenProperties(
                         screenTargetsProperty,
                         screenTargetModesProperty,

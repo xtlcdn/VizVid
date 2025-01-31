@@ -106,18 +106,10 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         [MenuItem(createMenuRoot + "Additional Controls/Screen", false, 49)]
-        static void CreateScreen() {
-            var go = SpawnPrefab(prefabRoot + "Default Screen.prefab");
-            var core = FUtils.FindClosestComponentInHierarchy<Core>(go.transform);
-            if (core != null) CoreEditor.AddTarget(core, go.GetComponent<Renderer>());
-        }
+        static void CreateScreen() => SpawnPrefab(prefabRoot + "Default Screen.prefab");
 
         [MenuItem(createMenuRoot + "Additional Controls/Pickupable Screen", false, 49)]
-        static void CreatePickupScreen() {
-            var go = SpawnPrefab(prefabRoot + "Pickup Screen.prefab");
-            var core = FUtils.FindClosestComponentInHierarchy<Core>(go.transform);
-            if (core != null) CoreEditor.AddTarget(core, go.transform.Find("Pickup_ScalingPanel/ScreenScaling/Screen").GetComponent<Renderer>());
-        }
+        static void CreatePickupScreen() => SpawnPrefab(prefabRoot + "Pickup Screen.prefab");
 
         [MenuItem(createMenuRoot + "Additional Controls/Audio Source", false, 49)]
         static void CreateAudioSource() {
@@ -136,11 +128,7 @@ namespace JLChnToZ.VRC.VVMW {
         static void CreateSeparateNarrowContolsDual() => SpawnPrefab(prefabRoot + "Default UI Dual Input (Narrow).prefab");
 
         [MenuItem(createMenuRoot + "Additional Controls/On-Screen Controls With Screen", false, 49)]
-        static void CreateOnScreenContols() {
-            var go = SpawnPrefab(prefabRoot + "Screen With Overlay.prefab");
-            var core = FUtils.FindClosestComponentInHierarchy<Core>(go.transform);
-            if (core != null) CoreEditor.AddTarget(core, go.transform.Find("Screen").GetComponent<Renderer>());
-        }
+        static void CreateOnScreenContols() => SpawnPrefab(prefabRoot + "Screen With Overlay.prefab");
 
         [MenuItem(createMenuRoot + "Additional Controls/Overlay Controls", false, 49)]
         static void CreateOverlayControls() {

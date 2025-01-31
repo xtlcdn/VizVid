@@ -712,18 +712,22 @@ namespace JLChnToZ.VRC.VVMW {
             RequestSerialization();
             return true;
         }
-
-#if !COMPILER_UDONSHARP
-        void OnDrawGizmosSelected() {
-            DrawScreenGizmos();
-            DrawAudioGizmos();
-        }
-#endif
     }
 
 #if !COMPILER_UDONSHARP
     public partial class Core : IVizVidCompoonent {
         Core IVizVidCompoonent.Core => this;
+
+        void OnDrawGizmosSelected() {
+            DrawScreenGizmos();
+            DrawAudioGizmos();
+        }
+
+        void OnValidate() {
+#if UNITY_EDITOR
+            ValidateScreen();
+#endif
+        }
     }
 #endif
 }

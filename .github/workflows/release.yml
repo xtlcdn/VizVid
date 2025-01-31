@@ -36,7 +36,7 @@ jobs:
 
       # Checkout Local Repository
       - name: Checkout
-        uses: actions/checkout@4
+        uses: actions/checkout@v4
 
       # Get the Package version based on the package.json file
       - name: Get Version

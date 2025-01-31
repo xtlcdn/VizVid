@@ -145,7 +145,7 @@ PrefabInstance:
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
       propertyPath: screenTargets.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
@@ -176,7 +176,7 @@ PrefabInstance:
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
       propertyPath: screenTargetModes.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
@@ -186,12 +186,12 @@ PrefabInstance:
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
       propertyPath: avProPropertyNames.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
       propertyPath: screenTargetIndeces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
@@ -481,12 +481,12 @@ PrefabInstance:
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
       propertyPath: screenTargetPropertyNames.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
       propertyPath: screenTargetDefaultTextures.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6288594591246789951, guid: 49b73e060e12aef4d955f993204c8a0c,
         type: 3}
@@ -913,6 +913,21 @@ PrefabInstance:
     - target: {fileID: 1357225253641258363, guid: 79cf3aad45d953145bf019277f8b3591,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435013630368214579, guid: 79cf3aad45d953145bf019277f8b3591,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435013630368214579, guid: 79cf3aad45d953145bf019277f8b3591,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435013630368214579, guid: 79cf3aad45d953145bf019277f8b3591,
+        type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1524749709482105981, guid: 79cf3aad45d953145bf019277f8b3591,

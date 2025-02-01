@@ -22,6 +22,7 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField] GameObject template;
         [FieldChangeCallback(nameof(SelectedIndex))]
         [SerializeField] int selectedIndex = -1;
+        [SerializeField] bool inverseOrder;
         [NonSerialized] public int lastClickedIndex;
         [NonSerialized] public int lastDeletedIndex;
         [NonSerialized] public int lastInteractIndex;
@@ -149,6 +150,7 @@ namespace JLChnToZ.VRC.VVMW {
                     entry.indexAsUserData = true;
                     entry.callbackTarget = this;
                     entry.isUpwards = isUpwards;
+                    entry.inverseOrder = inverseOrder;
                     entry.callbackEventName = nameof(_OnEntryClick);
                     entry.deleteEventName = nameof(_OnEntryDelete);
                     entry.callbackVariableName = nameof(lastInteractIndex);
@@ -209,7 +211,7 @@ namespace JLChnToZ.VRC.VVMW {
             if (!hasInit) return;
             var normalizedPosition = scrollRect.normalizedPosition;
             float pos = count > entriesPerViewport ? Mathf.Clamp01(index / (count - entriesPerViewport)) : 0;
-            if (!isUpwards) pos = 1 - pos;
+            if (isUpwards == inverseOrder) pos = 1 - pos;
             normalizedPosition.y = pos;
             scrollRect.normalizedPosition = normalizedPosition;
         }

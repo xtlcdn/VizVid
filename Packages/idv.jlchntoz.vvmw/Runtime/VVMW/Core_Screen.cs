@@ -62,6 +62,7 @@ namespace JLChnToZ.VRC.VVMW {
                     }
                 }
             }
+            SendCustomEventDelayedFrames(nameof(_OnTextureChanged), 0);
         }
 
 #if COMPILER_UDONSHARP

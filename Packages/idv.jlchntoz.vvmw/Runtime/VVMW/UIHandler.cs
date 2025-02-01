@@ -142,6 +142,7 @@ namespace JLChnToZ.VRC.VVMW {
         [BindEvent(nameof(Button.onClick), nameof(_OnCurrentPlayListSelectClick))]
         [SerializeField, LocalizedLabel] Button currentPlayListButton;
         [SerializeField, HideInInspector, Resolve(nameof(currentPlayListButton), NullOnly = false)] GameObject currentPlayListButtonObject;
+        [SerializeField, LocalizedLabel] bool autoHideCurrentPlayListButton = true;
 
         [LocalizedHeader("HEADER:Sync_Offset_Controls")]
         [SerializeField, LocalizedLabel] GameObject shiftControlsRoot;

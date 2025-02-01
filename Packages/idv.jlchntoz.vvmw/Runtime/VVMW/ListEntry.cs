@@ -38,6 +38,7 @@ namespace JLChnToZ.VRC.VVMW {
         [NonSerialized] public int spawnedEntryCount = 1;
         [NonSerialized] public int pooledEntryOffset, pooledEntryCount;
         [NonSerialized] public bool isUpwards;
+        [NonSerialized] public bool inverseOrder;
         float height;
         int lastOffset = -1;
         bool isSelected;
@@ -98,6 +99,7 @@ namespace JLChnToZ.VRC.VVMW {
             float anchoredPosition = parentRectTransform.anchoredPosition.y;
             if (isUpwards) anchoredPosition = -anchoredPosition;
             int newOffset = Mathf.FloorToInt((anchoredPosition / rectTransform.rect.height - entryOffset - 1) / spawnedEntryCount + 1) * spawnedEntryCount + entryOffset;
+            if (inverseOrder) newOffset = pooledEntryCount - newOffset;
             if (lastOffset == newOffset) return false;
             lastOffset = newOffset;
             return true;
@@ -110,7 +112,10 @@ namespace JLChnToZ.VRC.VVMW {
                 _UpdateContent();
                 float offset = lastOffset;
                 if (!isUpwards) offset = -offset;
-                rectTransform.anchoredPosition = new Vector2(0, offset * rectTransform.rect.height);
+                if (inverseOrder) offset = pooledEntryCount - offset;
+                var anchoredPosition = rectTransform.anchoredPosition;
+                anchoredPosition.y = offset * rectTransform.rect.height;
+                rectTransform.anchoredPosition = anchoredPosition;
                 gameObject.SetActive(true);
             } else {
                 gameObject.SetActive(false);

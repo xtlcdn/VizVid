@@ -131,7 +131,7 @@ namespace JLChnToZ.VRC.VVMW {
             if (isEntryContainerInactive || isNotCoolingDown)
                 SelectedPlayListIndex = selectedPlayListIndex = playListIndex;
             if (Utilities.IsValid(playNextButtonObject)) playNextButtonObject.SetActive(hasPending);
-            if (Utilities.IsValid(currentPlayListButtonObject)) currentPlayListButtonObject.SetActive(hasPending && selectedPlayListIndex >= 0);
+            if (autoHideCurrentPlayListButton && Utilities.IsValid(currentPlayListButtonObject)) currentPlayListButtonObject.SetActive(hasPending && selectedPlayListIndex >= 0);
             if (!string.IsNullOrEmpty(enqueueCountFormat))
                 SetText(enqueueCountText, enqueueCountTMPro, string.Format(enqueueCountFormat, pendingCount));
             if (selectedPlayListIndex > 0)

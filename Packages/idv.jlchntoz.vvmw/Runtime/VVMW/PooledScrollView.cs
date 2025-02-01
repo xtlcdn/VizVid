@@ -246,7 +246,6 @@ namespace JLChnToZ.VRC.VVMW {
         public int Priority => 0;
 
         public void PreProcess() {
-            Debug.Log("PreProcess PooledScrollView");
             var contentRT = GetComponent<ScrollRect>().content;
             var templateRT = template.GetComponent<RectTransform>();
             bool isContentAscending = contentRT.pivot.y < 0.5F != inverseOrder;

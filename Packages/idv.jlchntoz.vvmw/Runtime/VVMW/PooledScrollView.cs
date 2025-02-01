@@ -15,7 +15,7 @@ namespace JLChnToZ.VRC.VVMW {
     [BindEvent(typeof(ScrollRect), nameof(ScrollRect.onValueChanged), nameof(_OnScroll))]
     [AddComponentMenu("VizVid/Components/Pooled Scroll View")]
     [DefaultExecutionOrder(2)]
-    public class PooledScrollView : UdonSharpEventSender {
+    public partial class PooledScrollView : UdonSharpEventSender {
         ScrollRect scrollRect;
         [FieldChangeCallback(nameof(EventPrefix))]
         [SerializeField] string eventPrefix = "_On";
@@ -53,6 +53,7 @@ namespace JLChnToZ.VRC.VVMW {
                 scrollEventName = eventPrefix + "Scroll";
             }
         }
+
         public int SelectedIndex {
             get => selectedIndex;
             set {
@@ -239,4 +240,35 @@ namespace JLChnToZ.VRC.VVMW {
             SendEvent(scrollEventName);
         }
     }
+
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+    public partial class PooledScrollView : ISelfPreProcess {
+        public int Priority => 0;
+
+        public void PreProcess() {
+            Debug.Log("PreProcess PooledScrollView");
+            var contentRT = GetComponent<ScrollRect>().content;
+            var templateRT = template.GetComponent<RectTransform>();
+            bool isContentAscending = contentRT.pivot.y < 0.5F != inverseOrder;
+            templateRT.pivot = new Vector2(templateRT.pivot.x, isContentAscending ? 0F : 1F);
+            if (isContentAscending) return;
+            for (int i = contentRT.childCount - 1; i >= 0; i--) {
+                var child = contentRT.GetChild(i) as RectTransform;
+                if (!child || child == templateRT) continue;
+                var anchorMin = child.anchorMin;
+                var anchorMax = child.anchorMax;
+                var pivot = child.pivot;
+                var position = child.anchoredPosition;
+                anchorMin.y = 1F - anchorMin.y;
+                anchorMax.y = 1F - anchorMax.y;
+                pivot.y = 1F - pivot.y;
+                position.y = -position.y;
+                child.anchorMin = anchorMin;
+                child.anchorMax = anchorMax;
+                child.pivot = pivot;
+                child.anchoredPosition = position;
+            }
+        }
+    }
+#endif
 }

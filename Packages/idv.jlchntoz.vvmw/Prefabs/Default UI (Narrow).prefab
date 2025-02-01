@@ -2624,12 +2624,13 @@ MonoBehaviour:
   playListTogglePanelButton: {fileID: 912951884492069905}
   queueListScrollView: {fileID: 2238140308991275377}
   queueListScrollViewObject: {fileID: 0}
-  playNextIndicator: {fileID: 7007343303285611290}
+  playNextIndicator: {fileID: 4682421535308736151}
   selectedPlayListObject: {fileID: 4953464436314133354}
   selectedPlayListText: {fileID: 1906736415800344448}
   selectedPlayListTMPro: {fileID: 0}
   currentPlayListButton: {fileID: 0}
   currentPlayListButtonObject: {fileID: 0}
+  autoHideCurrentPlayListButton: 1
   shiftControlsRoot: {fileID: 0}
   shiftBackLButton: {fileID: 3583192662858300212}
   shiftBackLButtonObject: {fileID: 0}
@@ -6425,15 +6426,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5447133362155513468}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4953464436314133354 stripped
+--- !u!1 &4682421535308736151 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1091603148826326294, guid: 841e46d7359c4d641ac726e061f76c26,
+  m_CorrespondingSourceObject: {fileID: 820595752228225259, guid: 841e46d7359c4d641ac726e061f76c26,
     type: 3}
   m_PrefabInstance: {fileID: 5447133362155513468}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7007343303285611290 stripped
+--- !u!1 &4953464436314133354 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3073442267449032038, guid: 841e46d7359c4d641ac726e061f76c26,
+  m_CorrespondingSourceObject: {fileID: 1091603148826326294, guid: 841e46d7359c4d641ac726e061f76c26,
     type: 3}
   m_PrefabInstance: {fileID: 5447133362155513468}
   m_PrefabAsset: {fileID: 0}

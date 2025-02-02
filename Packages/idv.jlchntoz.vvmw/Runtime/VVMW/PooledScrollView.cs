@@ -143,9 +143,13 @@ namespace JLChnToZ.VRC.VVMW {
                 entriesPerViewport = viewportHeight / templateHeight;
                 var entryCount = Mathf.CeilToInt(entriesPerViewport) + 1;
                 entries = new ListEntry[entryCount];
+                var templatePos = templateRect.localPosition;
+                var templateRot = templateRect.localRotation;
                 for (var i = 0; i < entryCount; i++) {
                     var instance = Instantiate(template);
-                    instance.transform.SetParent(contentRect, false);
+                    var instTrans = instance.transform;
+                    instTrans.SetParent(contentRect, false);
+                    instTrans.SetLocalPositionAndRotation(templatePos, templateRot);
                     var entry = instance.GetComponent<ListEntry>();
                     entry.asPooledEntry = true;
                     entry.indexAsUserData = true;

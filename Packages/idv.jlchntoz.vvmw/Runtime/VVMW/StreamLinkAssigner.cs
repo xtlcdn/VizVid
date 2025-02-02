@@ -61,7 +61,7 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         void UpdateText() {
-            if (inputFieldToCopy) inputFieldToCopy.text = streamKeys[streamIndex];
+            if (Utilities.IsValid(inputFieldToCopy)) inputFieldToCopy.text = streamKeys[streamIndex];
         }
 
         /// <summary>
@@ -100,18 +100,18 @@ namespace JLChnToZ.VRC.VVMW {
                 Debug.LogError("[Stream Key Assigner] No stream key is assigned. Unable to play.");
                 return;
             }
-            if (frontendHandler) {
-                bool enableIntrrupt = autoInterrupt && frontendHandler.HasQueueList;
-                int currentPendingCount = enableIntrrupt && frontendHandler.PlayListIndex == 0 ? frontendHandler.PendingCount : -1;
+            if (Utilities.IsValid(frontendHandler)) {
+                bool enableIntrrupt = autoInterrupt && frontendHandler.HasQueueList && frontendHandler.PlayListIndex == 0;
+                int currentPendingCount = enableIntrrupt ? frontendHandler.PendingCount : -1;
                 frontendHandler.PlayUrl(streamLinks[streamIndex], altStreamLinks[streamIndex], (byte)playerIndex);
-                if (enableIntrrupt && frontendHandler.PlayListIndex == 0) {
+                if (enableIntrrupt) {
                     int pendingCount = frontendHandler.PendingCount;
                     if (pendingCount > currentPendingCount)
                         frontendHandler.PlayAt(0, pendingCount - 1, false);
                 }
                 return;
             }
-            if (core) core.PlayUrl(streamLinks[streamIndex], altStreamLinks[streamIndex], (byte)playerIndex);
+            if (Utilities.IsValid(core)) core.PlayUrl(streamLinks[streamIndex], altStreamLinks[streamIndex], (byte)playerIndex);
         }
     }
 

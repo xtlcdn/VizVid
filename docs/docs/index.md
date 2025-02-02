@@ -69,7 +69,7 @@ To add them, right-click on the player object in hierarchy, and select one of th
 
 ### How to Add/Import/Export a Playlist?
 Playlists are pre-defined lists that the player will plays. All playlists associated to a video player instance are defined and controlled in a "Playlist Queue Handler" game object, unlike how some other video player designs, whatever amount of controllers you added for a player, you are still interacting with the same list of the queued videos. Here is how you can manipulate Playlists:
-1. Select "Play List Queue Handler" game object in hierarchy.
+1. Select "VVMW" or "Play List Queue Handler" game object in hierarchy.
 2. Click "Edit Playlists..." button.
    ![ ](../resources/images/add-playlist-1.png)
 3. In the new popup window, you can:
@@ -155,6 +155,13 @@ As we are also music event organizers/performers, we all know the pain to find a
 3. Change the **Stream Key Template**, **Stream URL Template** and **Alt Stream URL Template** according to your streaming sevice, and click **Generate**. (For Key Count and Unique ID Length option, it depends on how popular your world does, but normally 100 streaming keys and 5 characters length is enough for per-instance random)
 4. Adjust the object placement as you like, then you are done.
 
+### How to Reverse the Playlist/Queue List Display Order?
+
+You can choose to let the playlist/queue list display in ascending order (top goes first) instead of by default descending order (bottom goes first).
+1. Find and select the **Play List Entries** inside the UI Controls, you can do it by typing `Play List Entries` or `t:PooledScrollView` in the search bar in hierarchy tab.
+2. Go to the inspector, find the **Inverse Order** property, enable it.
+![ ](../resources/images/ascending-order.png)
+
 ## Details in the Bundle
 In the prefab, it should look like this in hierarchy:
 - VVMW
@@ -203,6 +210,8 @@ This is the "brain" of the system, it controls and synchronizes the player (if e
   I don't provide source-code level documentation so please read the source code if you want to integrate with your scripts.
 - **Realtime GI Update Interval**: The interval to update realtime GI, set to 0 to disable realtime GI update.
   This features requires setup the light probes and realtime GI in the scene and the screen renderers.
+
+This inspector will also contains options find in [Builtin Module, AVPro Module, Image Module](#builtin-module--avpro-module--image-module), [Playlist Queue Handler](#playlist-queue-handler), it is basically the same as editing them by select respective components.
 
 ### Builtin Module / AVPro Module / Image Module
 These are the video player / image viewer modules. The purpose of these game objects are interfaces from the undely video player / image loader components to the core.
@@ -275,6 +284,10 @@ There is no adjustable options for this module.
 
 ### Default Screen / Screen
 This is the default screen, you can resize and move it to anywhere you want. For details and guides, please see [How to Add Extra Screen](#how-to-add-extra-screen) section above.
+
+#### Screen Configurator
+This is the component for quickly configurate VizVid default screens. You can assign the attached screen with different core. Also includes options for quickly setup the screen.
+Please refer to [VVMW (Game Object)](#vvmw-game-object).
 
 ### Default Audio Source
 This is the default audio source. For details and guides, please see [How to Add Extra Audio Source](#how-to-add-extra-audio-source) section above.

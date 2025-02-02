@@ -12,6 +12,7 @@ using UnityEditor.SceneManagement;
 namespace JLChnToZ.VRC.VVMW.Designer {
     [ExecuteInEditMode]
     [EditorOnly]
+    [HelpURL("https://xtlcdn.github.io/VizVid/docs/#screen-configurator")]
     [AddComponentMenu("VizVid/Components/Screen Configurator")]
     public class ScreenConfigurator : MonoBehaviour, IVizVidCompoonent {
         static readonly List<MonoBehaviour> monoBehaviours = new List<MonoBehaviour>();

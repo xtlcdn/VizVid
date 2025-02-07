@@ -22,7 +22,7 @@ namespace JLChnToZ.VRC.VVMW {
     public partial class UIHandler : VizVidBehaviour {
         [LocalizedHeader("HEADER:Main_Reference")]
         [SerializeField, BindUdonSharpEvent, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")]
-        [Resolve(nameof(handler), HideInInspectorIfResolvable = true), Resolve("core")]
+        [Resolve(nameof(handler) + "." + nameof(FrontendHandler.core), HideInInspectorIfResolvable = true)]
         [Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before

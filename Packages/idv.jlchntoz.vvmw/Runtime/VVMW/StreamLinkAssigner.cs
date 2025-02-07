@@ -19,7 +19,7 @@ namespace JLChnToZ.VRC.VVMW {
     [HelpURL("https://xtlcdn.github.io/VizVid/docs/#how-to-automatically-assigns-unique-stream-links-for-each-event-performer-or-instance")]
     public partial class StreamLinkAssigner : VizVidBehaviour {
         [SerializeField, LocalizedLabel(Key = "JLChnToZ.VRC.VVMW.Core")]
-        [Resolve(nameof(frontendHandler), HideInInspectorIfResolvable = true), Resolve("core")]
+        [Resolve(nameof(frontendHandler) + "." + nameof(FrontendHandler.core), HideInInspectorIfResolvable = true)]
         [Locatable(
             InstaniatePrefabPath = "Packages/idv.jlchntoz.vvmw/VVMW (No Controls).prefab",
             InstaniatePrefabPosition = LocatableAttribute.InstaniatePrefabHierachyPosition.Before

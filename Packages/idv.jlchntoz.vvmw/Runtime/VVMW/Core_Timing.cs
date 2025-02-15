@@ -11,6 +11,8 @@ namespace JLChnToZ.VRC.VVMW {
         [UdonSynced] long ownerServerTime;
         [UdonSynced] long time;
         [UdonSynced] float syncedSpeed = 1, syncedActualSpeed = 1;
+        [FieldChangeCallback(nameof(PerformerId))]
+        [UdonSynced] ushort performerId;
         [FieldChangeCallback(nameof(SyncOffset))]
         float syncOffset = 0;
         [FieldChangeCallback(nameof(Speed))]
@@ -18,6 +20,7 @@ namespace JLChnToZ.VRC.VVMW {
         float syncLatency;
         bool isResyncTime;
         DateTime lastSyncTime;
+        VRCPlayerApi performer;
 
         /// <summary>
         /// The current time of the video in seconds.
@@ -97,6 +100,24 @@ namespace JLChnToZ.VRC.VVMW {
         }
 
         /// <summary>
+        /// Gets the performer of the video player playback.
+        /// </summary>
+        public VRCPlayerApi Performer => performer;
+
+        ushort PerformerId {
+            set {
+                performerId = value;
+                if (performerId == 0)
+                    performer = null;
+                else
+                    performer = VRCPlayerApi.GetPlayerById(performerId);
+                SendEvent("_OnPerformerChange");
+            }
+        }
+
+        float PerformerLatency => Utilities.IsValid(performer) && !performer.isLocal ? UnityEngine.Time.realtimeSinceStartup - Networking.SimulationTime(performer) : 0;
+
+        /// <summary>
         /// Event entry point on the ownership of the video player is transferred.
         /// Internal use only. Do not call this method.
         /// </summary>
@@ -141,7 +162,7 @@ namespace JLChnToZ.VRC.VVMW {
             var duration = activeHandler.Duration;
             if (duration <= 0 || float.IsInfinity(duration)) return 0;
             var videoTime = Mathf.Repeat(activeHandler.Time, duration);
-            var syncTime = (long)((videoTime / actualSpeed - syncOffset) * TimeSpan.TicksPerSecond);
+            var syncTime = (long)((videoTime / actualSpeed - syncOffset + PerformerLatency) * TimeSpan.TicksPerSecond);
             if (activeHandler.IsPlaying) syncTime = Networking.GetNetworkDateTime().Ticks - syncTime;
             if (synced) syncedActualSpeed = actualSpeed;
             return syncTime;
@@ -154,7 +175,7 @@ namespace JLChnToZ.VRC.VVMW {
             float videoTime;
             int intState = state;
             switch (intState) {
-                case PLAYING: videoTime = ((float)(Networking.GetNetworkDateTime().Ticks - time) / TimeSpan.TicksPerSecond + syncOffset + syncLatency) * actualSpeed; break;
+                case PLAYING: videoTime = ((float)(Networking.GetNetworkDateTime().Ticks - time) / TimeSpan.TicksPerSecond + syncOffset + syncLatency - PerformerLatency) * actualSpeed; break;
                 case PAUSED: videoTime = (float)time / TimeSpan.TicksPerSecond; break;
                 default: return 0;
             }
@@ -196,6 +217,28 @@ namespace JLChnToZ.VRC.VVMW {
             isOwnerSyncRequested = false;
             if (!synced) return;
             SendCustomNetworkEvent(NetworkEventTarget.Owner, nameof(OwnerSync));
+        }
+
+        /// <summary>
+        /// Let current user be the performer of current video player playback. (Experimental)
+        /// </summary>
+        /// <param name="enable">Enable or disable the performance mode.</param>
+        /// <remarks>
+        /// Video playback time will be auto adjusted to cancel-out the latency between the performer and audience (other users).
+        /// </remarks>
+        public void SetOwnPerformer(bool enable) {
+            if (!synced) return;
+            var player = Networking.LocalPlayer;
+            if (enable) {
+                var newHostId = player.playerId;
+                if (newHostId == performerId) return;
+                PerformerId = (ushort)newHostId;
+            } else if (performerId == player.playerId) {
+                PerformerId = 0;
+            } else return;
+            if (!Networking.IsOwner(gameObject))
+                Networking.SetOwner(player, gameObject);
+            RequestSerialization();
         }
 
 #if COMPILER_UDONSHARP

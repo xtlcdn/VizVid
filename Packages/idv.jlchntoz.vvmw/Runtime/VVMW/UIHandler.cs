@@ -165,6 +165,10 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, HideInInspector, Resolve(nameof(shiftOffsetObject), NullOnly = false)] Text shiftOffsetText;
         [SerializeField, HideInInspector, Resolve(nameof(shiftOffsetObject), NullOnly = false)] TextMeshProUGUI shiftOffsetTMPro;
 
+        [BindEvent(nameof(Toggle.onValueChanged), nameof(_PerformanceModeToggle))]
+        [SerializeField, LocalizedLabel] Button performanceModeToggle;
+        [SerializeField, LocalizedLabel] GameObject performanceModeSelf, performanceModeOthers, performanceModeOff;
+
         [LocalizedHeader("HEADER:Speed_Adjustment_Controls")]
         [SerializeField, LocalizedLabel] GameObject speedControlsRoot;
         [BindEvent(nameof(Button.onClick), nameof(_SpeedDownL))]
@@ -535,6 +539,20 @@ namespace JLChnToZ.VRC.VVMW {
             if (Utilities.IsValid(speedUpSButton)) speedUpSButton.interactable = canChangeSpeed;
             if (Utilities.IsValid(speedUpLButton)) speedUpLButton.interactable = canChangeSpeed;
             if (Utilities.IsValid(speedResetButton)) speedResetButton.interactable = canChangeSpeed;
+            if (Utilities.IsValid(performanceModeToggle)) {
+                performanceModeToggle.interactable = unlocked;
+                var performer = core.Performer;
+                bool isOff = false, isSelf = false, isOthers = false;
+                if (!Utilities.IsValid(performer))
+                    isOff = true;
+                else if (performer.isLocal)
+                    isSelf = true;
+                else
+                    isOthers = true;
+                if (Utilities.IsValid(performanceModeOff)) performanceModeOff.SetActive(isOff);
+                if (Utilities.IsValid(performanceModeSelf)) performanceModeSelf.SetActive(isSelf);
+                if (Utilities.IsValid(performanceModeOthers)) performanceModeOthers.SetActive(isOthers);
+            }
         }
 
         void SetLocalizedText(Text text, TextMeshProUGUI tmp, string locale) {

@@ -80,5 +80,13 @@ namespace JLChnToZ.VRC.VVMW {
             if (!afterFirstRun) return;
             SetText(speedOffsetText, speedOffsetTMPro, string.Format(languageManager.GetLocale("SpeedOffset"), core.Speed));
         }
+
+#if COMPILER_UDONSHARP
+        public
+#endif
+        void _PerformanceModeToggle() {
+            var performer = core.Performer;
+            core.SetOwnPerformer(!Utilities.IsValid(performer) || !performer.isLocal);
+        }
     }
 }

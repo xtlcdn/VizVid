@@ -95,12 +95,14 @@ namespace JLChnToZ.VRC.VVMW {
         void _OnPerformerChange() {
             var performer = core.Performer;
             bool isOff = false, isSelf = false, isOthers = false;
-            if (!Utilities.IsValid(performer))
+            if (Utilities.IsValid(performer)) {
+                if (performer.isLocal)
+                    isSelf = true;
+                else
+                    isOthers = true;
+                SetText(performerText, performerTMPro, performer.displayName);
+            } else
                 isOff = true;
-            else if (performer.isLocal)
-                isSelf = true;
-            else
-                isOthers = true;
             if (Utilities.IsValid(performanceModeOff)) performanceModeOff.SetActive(isOff);
             if (Utilities.IsValid(performanceModeSelf)) performanceModeSelf.SetActive(isSelf);
             if (Utilities.IsValid(performanceModeOthers)) performanceModeOthers.SetActive(isOthers);

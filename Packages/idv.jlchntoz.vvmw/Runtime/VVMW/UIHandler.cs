@@ -168,6 +168,9 @@ namespace JLChnToZ.VRC.VVMW {
         [BindEvent(nameof(Button.onClick), nameof(_PerformanceModeToggle))]
         [SerializeField, LocalizedLabel] Button performanceModeToggle;
         [SerializeField, LocalizedLabel] GameObject performanceModeSelf, performanceModeOthers, performanceModeOff;
+        [SerializeField, LocalizedLabel] GameObject performerDisplay;
+        [SerializeField, HideInInspector, Resolve(nameof(performerDisplay), NullOnly = false)] Text performerText;
+        [SerializeField, HideInInspector, Resolve(nameof(performerDisplay), NullOnly = false)] TextMeshProUGUI performerTMPro;
 
         [LocalizedHeader("HEADER:Speed_Adjustment_Controls")]
         [SerializeField, LocalizedLabel] GameObject speedControlsRoot;

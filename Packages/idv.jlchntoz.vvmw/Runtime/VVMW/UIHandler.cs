@@ -165,7 +165,7 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, HideInInspector, Resolve(nameof(shiftOffsetObject), NullOnly = false)] Text shiftOffsetText;
         [SerializeField, HideInInspector, Resolve(nameof(shiftOffsetObject), NullOnly = false)] TextMeshProUGUI shiftOffsetTMPro;
 
-        [BindEvent(nameof(Toggle.onValueChanged), nameof(_PerformanceModeToggle))]
+        [BindEvent(nameof(Button.onClick), nameof(_PerformanceModeToggle))]
         [SerializeField, LocalizedLabel] Button performanceModeToggle;
         [SerializeField, LocalizedLabel] GameObject performanceModeSelf, performanceModeOthers, performanceModeOff;
 

@@ -101,8 +101,10 @@ namespace JLChnToZ.VRC.VVMW {
                 else
                     isOthers = true;
                 SetText(performerText, performerTMPro, performer.displayName);
-            } else
+            } else {
                 isOff = true;
+                SetText(performerText, performerTMPro, "");
+            }
             if (Utilities.IsValid(performanceModeOff)) performanceModeOff.SetActive(isOff);
             if (Utilities.IsValid(performanceModeSelf)) performanceModeSelf.SetActive(isSelf);
             if (Utilities.IsValid(performanceModeOthers)) performanceModeOthers.SetActive(isOthers);

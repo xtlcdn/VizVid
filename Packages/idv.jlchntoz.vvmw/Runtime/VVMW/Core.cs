@@ -526,7 +526,7 @@ namespace JLChnToZ.VRC.VVMW {
                 case PAUSED: activeHandler.Pause(); break;
                 default: return;
             }
-            if (videoTime > 0) activeHandler.Time = videoTime;
+            if (videoTime > 0) Time = videoTime;
         }
 
         /// <summary>

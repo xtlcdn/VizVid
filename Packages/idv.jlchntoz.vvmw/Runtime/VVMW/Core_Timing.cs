@@ -18,6 +18,7 @@ namespace JLChnToZ.VRC.VVMW {
         [FieldChangeCallback(nameof(Speed))]
         float speed = 1, actualSpeed = 1;
         float syncLatency;
+        float lastSyncRawTime;
         bool isResyncTime;
         DateTime lastSyncTime;
         VRCPlayerApi performer;
@@ -28,7 +29,13 @@ namespace JLChnToZ.VRC.VVMW {
         /// <remarks>
         /// If it is a live stream, this value will be zero.
         /// </remarks>
-        public float Time => Utilities.IsValid(activeHandler) ? activeHandler.Time : 0;
+        public float Time {
+            get => Utilities.IsValid(activeHandler) ? activeHandler.Time : 0;
+            private set {
+                activeHandler.Time = value;
+                lastSyncRawTime = value;
+            }
+        }
 
         /// <summary>
         /// The duration of the video in seconds.
@@ -50,7 +57,7 @@ namespace JLChnToZ.VRC.VVMW {
                 if (synced && Utilities.IsValid(activeHandler) && activeHandler.IsPlaying) {
                     var duration = activeHandler.Duration;
                     if (duration <= 0 || float.IsInfinity(duration)) return;
-                    activeHandler.Time = CalcVideoTime();
+                    Time = CalcVideoTime();
                     SendEvent("_OnTimeDrift");
                 }
             }
@@ -73,7 +80,7 @@ namespace JLChnToZ.VRC.VVMW {
                 if (!Utilities.IsValid(activeHandler)) return;
                 var duration = activeHandler.Duration;
                 if (activeHandler.Duration <= 0 || float.IsInfinity(duration)) return;
-                activeHandler.Time = duration * value;
+                Time = duration * value;
                 RequestSync();
             }
         }
@@ -179,8 +186,7 @@ namespace JLChnToZ.VRC.VVMW {
                 case PAUSED: videoTime = (float)time / TimeSpan.TicksPerSecond; break;
                 default: return 0;
             }
-            if (loop) videoTime = Mathf.Repeat(videoTime, duration);
-            return videoTime;
+            return loop ? Mathf.Repeat(videoTime, duration) : Mathf.Clamp(videoTime, 0, duration);
         }
 
         void SyncTime(bool forced) {
@@ -198,10 +204,10 @@ namespace JLChnToZ.VRC.VVMW {
                 if (!forced) {
                     var t2 = activeHandler.Time;
                     if (loop) t2 = Mathf.Repeat(t2, duration);
-                    forced = Mathf.Abs(t2 - t) >= timeDriftDetectThreshold;
+                    forced = (!activeHandler.IsPlaying || t2 != lastSyncRawTime) && Mathf.Abs(t2 - t) >= timeDriftDetectThreshold;
                 }
                 if (forced) {
-                    activeHandler.Time = t;
+                    Time = t;
                     SendEvent("_OnTimeDrift");
                 }
             }

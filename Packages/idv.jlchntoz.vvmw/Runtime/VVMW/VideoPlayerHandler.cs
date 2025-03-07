@@ -37,11 +37,11 @@ namespace JLChnToZ.VRC.VVMW {
         [SerializeField, LocalizedLabel] Material blitMaterial;
         [SerializeField, LocalizedLabel] bool isLowLatency;
         [SerializeField, HideInInspector] RateLimitResolver rateLimitResolver;
-        Animator animator;
+        [SerializeField, HideInInspector, Resolve(".")] Animator animator;
+        [SerializeField, HideInInspector, Resolve(".")] BaseVRCVideoPlayer videoPlayer;
+        [SerializeField, HideInInspector, Resolve(".")] new Renderer renderer;
         RenderTexture bufferedTexture;
         bool isWaitingForTexture, isFlickerWorkaroundTextureRunning, isLoadUrlRequested;
-        BaseVRCVideoPlayer videoPlayer;
-        new Renderer renderer;
         MaterialPropertyBlock propertyBlock;
         int texturePropertyID, speedParameterID;
         bool isRealTimeProtocol;
@@ -162,11 +162,8 @@ namespace JLChnToZ.VRC.VVMW {
         void OnEnable() {
             if (afterFirstRun) return;
             afterFirstRun = true;
-            animator = GetComponent<Animator>();
-            videoPlayer = (BaseVRCVideoPlayer)GetComponent(typeof(BaseVRCVideoPlayer));
-            renderer = (Renderer)GetComponent(typeof(Renderer));
             texturePropertyID = VRCShader.PropertyToID(texturePropertyName);
-            if (animator) {
+            if (Utilities.IsValid(animator)) {
                 speedParameterID = Animator.StringToHash(speedParameterName);
                 animator.Rebind();
             }

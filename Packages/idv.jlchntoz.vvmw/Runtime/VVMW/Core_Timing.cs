@@ -201,10 +201,13 @@ namespace JLChnToZ.VRC.VVMW {
                 var duration = activeHandler.Duration;
                 if (duration <= 0 || float.IsInfinity(duration)) return;
                 float t = CalcVideoTime();
-                if (!forced) {
-                    var t2 = activeHandler.Time;
-                    if (loop) t2 = Mathf.Repeat(t2, duration);
-                    forced = (!activeHandler.IsPlaying || t2 != lastSyncRawTime) && Mathf.Abs(t2 - t) >= timeDriftDetectThreshold;
+                var t2 = activeHandler.Time;
+                if (!activeHandler.IsPlaying || t2 != lastSyncRawTime) {
+                    lastSyncRawTime = t2;
+                    if (!forced) {
+                        if (loop) t2 = Mathf.Repeat(t2, duration);
+                        forced = Mathf.Abs(t2 - t) >= timeDriftDetectThreshold;
+                    }
                 }
                 if (forced) {
                     Time = t;

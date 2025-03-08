@@ -19,6 +19,7 @@ namespace JLChnToZ.VRC.VVMW {
         float speed = 1, actualSpeed = 1;
         float syncLatency;
         float lastSyncRawTime;
+        bool isBuffering;
         bool isResyncTime;
         DateTime lastSyncTime;
         VRCPlayerApi performer;
@@ -34,6 +35,7 @@ namespace JLChnToZ.VRC.VVMW {
             private set {
                 activeHandler.Time = value;
                 lastSyncRawTime = value;
+                isBuffering = false; // Reset buffering state
             }
         }
 
@@ -202,13 +204,26 @@ namespace JLChnToZ.VRC.VVMW {
                 if (duration <= 0 || float.IsInfinity(duration)) return;
                 float t = CalcVideoTime();
                 var t2 = activeHandler.Time;
-                if (!activeHandler.IsPlaying || t2 != lastSyncRawTime) {
+                // Is playing + time (progress) not changed since last check = video is buffering or paused
+                // Do not align the time this case as it may cause current non-ready buffer to be discard and rebuffered
+                // causing the video to be stuck in buffering state.
+                bool isPlaying = activeHandler.IsPlaying;
+                if (!isPlaying || t2 != lastSyncRawTime) {
+                    // If it was buffering, we shift the time a bit further, estimates user loading time for catching up
+                    if (isBuffering) {
+                        if (isPlaying) {
+                            float tCatchup = t2 - lastSyncRawTime;
+                            if (tCatchup > timeDriftDetectThreshold) t += tCatchup;
+                        }
+                        isBuffering = false;
+                    }
                     lastSyncRawTime = t2;
                     if (!forced) {
                         if (loop) t2 = Mathf.Repeat(t2, duration);
                         forced = Mathf.Abs(t2 - t) >= timeDriftDetectThreshold;
                     }
-                }
+                } else
+                    isBuffering = isPlaying;
                 if (forced) {
                     Time = t;
                     SendEvent("_OnTimeDrift");
